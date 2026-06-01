@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goktug Yaman — Data & BI Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0d0a;
+    --bg2: #181410;
+    --bg3: #221c14;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8ede9;
+    --text2: #9e8f7a;
+    --text3: #6b5c47;
+    --accent: #ff9f2e;
+    --accent2: #c97520;
+    --accent-dim: rgba(255,159,46,0.12);
+    --accent-dim2: rgba(255,159,46,0.05);
+    --amber: #ffb840;
+    --amber-dim: rgba(255,184,64,0.1);
+    --blue: #60b8ff;
+    --blue-dim: rgba(96,184,255,0.1);
+    --danger: #ff6b6b;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    background: rgba(15,13,10,0.96);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    flex-shrink: 0;
+  }
+
+  .header-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .header-links a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .header-links a:hover { color: var(--text); }
+
+  .badge-available {
+    font-size: 11px;
+    font-weight: 500;
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid rgba(255,159,46,0.25);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: var(--font-mono);
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    background: var(--bg2);
+  }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    color: var(--text2);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 14px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* HERO */
+  .hero {
+    padding: 3rem 2rem 2.5rem;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+
+  .hero h1 {
+    font-family: var(--font-head);
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero p {
+    color: var(--text2);
+    font-size: 15px;
+    font-weight: 300;
+    max-width: 560px;
+    line-height: 1.7;
+  }
+
+  /* MAIN CONTENT */
+  main { padding: 2rem; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* KPI CARDS */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .kpi-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem 1.4rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .kpi-card:hover { border-color: var(--border2); }
+
+  .kpi-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+
+  .kpi-value {
+    font-family: var(--font-head);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+
+  .kpi-delta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .kpi-delta.up { color: #4ade80; }
+  .kpi-delta.down { color: var(--danger); }
+
+  .kpi-accent-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    opacity: 0.35;
+  }
+
+  /* FILTER ROW */
+  .filter-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: 12px;
+    color: var(--text3);
+    font-family: var(--font-mono);
+    margin-right: 4px;
+  }
+
+  select {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+    padding-right: 28px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a9e93' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+  select:focus { border-color: var(--accent); }
+
+  /* CHARTS GRID */
+  .charts-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 700px) {
+    .charts-row { grid-template-columns: 1fr; }
+  }
+
+  .chart-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.4rem;
+  }
+
+  .chart-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .chart-title .period-tag {
+    font-size: 10px;
+    background: var(--bg3);
+    color: var(--text3);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .chart-wrap {
+    position: relative;
+  }
+
+  /* TABLE */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .data-table th {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+  .data-table td {
+    padding: 10px 12px;
+    color: var(--text2);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .data-table tr:hover td { background: var(--bg3); color: var(--text); }
+  .data-table .num { font-family: var(--font-mono); color: var(--text); }
+  .data-table .trend-up { color: #4ade80; font-family: var(--font-mono); font-size: 12px; }
+  .data-table .trend-down { color: var(--danger); font-family: var(--font-mono); font-size: 12px; }
+
+  /* BOTTOM ROW */
+  .bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 700px) {
+    .bottom-row { grid-template-columns: 1fr; }
+  }
+
+  /* ETL PANEL */
+  .etl-header {
+    margin-bottom: 2rem;
+  }
+
+  .etl-header h2 {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 0.4rem;
+  }
+
+  .etl-header p {
+    color: var(--text2);
+    font-size: 14px;
+    font-weight: 300;
+  }
+
+  .pipeline-section {
+    margin-bottom: 2rem;
+  }
+
+  .pipeline-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .pipeline-stages {
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+    margin-bottom: 1.5rem;
+  }
+
+  .stage {
+    flex: 1;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-right: none;
+    padding: 1.2rem 1.4rem;
+    transition: all 0.4s;
+    position: relative;
+    min-width: 0;
+  }
+
+  .stage:first-child { border-radius: 10px 0 0 10px; }
+  .stage:last-child { border-radius: 0 10px 10px 0; border-right: 1px solid var(--border); }
+
+  .stage.active {
+    background: rgba(255,159,46,0.07);
+    border-color: rgba(255,159,46,0.35);
+    border-right-color: rgba(255,159,46,0.35);
+    z-index: 1;
+  }
+  .stage.done {
+    background: rgba(255,159,46,0.03);
+    border-color: rgba(255,159,46,0.18);
+    border-right-color: rgba(255,159,46,0.18);
+  }
+  .stage.error {
+    background: rgba(255,107,107,0.06);
+    border-color: rgba(255,107,107,0.3);
+    border-right-color: rgba(255,107,107,0.3);
+  }
+
+  .stage-icon {
+    font-size: 20px;
+    margin-bottom: 0.6rem;
+  }
+
+  .stage-name {
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .stage-desc {
+    font-size: 12px;
+    color: var(--text3);
+    line-height: 1.5;
+  }
+
+  .stage-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+
+  .status-idle { background: var(--bg3); color: var(--text3); }
+  .status-running { background: var(--amber-dim); color: var(--amber); animation: blink 1s infinite; }
+  .status-done { background: var(--accent-dim); color: var(--accent); }
+  .status-error { background: rgba(255,107,107,0.1); color: var(--danger); }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  /* METRICS ROW */
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+  @media (max-width: 600px) {
+    .metrics-row { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .metric-mini {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+  }
+  .metric-mini .m-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+  .metric-mini .m-val {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  /* LOG */
+  .log-section {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .log-header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  .log-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent);
+    display: inline-block;
+    margin-right: 6px;
+  }
+
+  #log-output {
+    padding: 1rem 1.2rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    min-height: 180px;
+    max-height: 280px;
+    overflow-y: auto;
+    color: var(--text3);
+    line-height: 1.8;
+  }
+
+  .log-line { display: flex; gap: 12px; }
+  .log-ts { color: var(--text3); flex-shrink: 0; }
+  .log-info { color: var(--text2); }
+  .log-success { color: var(--accent); }
+  .log-warning { color: var(--amber); }
+  .log-error { color: var(--danger); }
+  .log-data { color: var(--blue); }
+
+  /* BUTTONS */
+  .btn {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 20px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0f0d0a;
+  }
+  .btn-primary:hover { background: #ffb85e; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .btn-ghost {
+    background: var(--bg2);
+    color: var(--text2);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--border2); color: var(--text); }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+    align-items: center;
+  }
+
+  .run-status-text {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text3);
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* SCROLL */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    Goktug Yaman
+  </div>
+  <div class="header-links">
+    <span class="badge-available">Available for hire</span>
+    <a href="https://www.linkedin.com/in/goktug-yaman/" target="_blank">LinkedIn ↗</a>
+    <a href="mailto:a.goktugyaman@gmail.com">Contact</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-tag">Data &amp; BI Portfolio</div>
+  <h1>Turning raw data into<br><span>clear decisions</span></h1>
+  <p>Python · SQL · Power BI · SAP BI · ETL · Cloud Analytics · API Integration — building data infrastructure and insights for manufacturing and enterprise.</p>
+</div>
+
+<nav class="nav-tabs">
+  <button class="tab-btn active" onclick="switchTab('dashboard', this)">Sales Analytics Dashboard</button>
+  <button class="tab-btn" onclick="switchTab('etl', this)">ETL Pipeline Simulator</button>
+  <button class="tab-btn" onclick="switchTab('logistics', this)">Logistics API</button>
+  <button class="tab-btn" onclick="switchTab('stock', this)">Stock Coverage</button>
+  <button class="tab-btn" onclick="switchTab('docs', this)">Documents &amp; References</button>
+</nav>
+
+<main>
+
+<!-- ===== DASHBOARD TAB ===== -->
+<section id="tab-dashboard" class="tab-panel active">
+
+  <div class="filter-row">
+    <span class="filter-label">filter:</span>
+    <select id="regionFilter" onchange="updateDashboard()">
+      <option value="all">All regions</option>
+      <option value="dach">DACH</option>
+      <option value="benelux">Benelux</option>
+      <option value="nordic">Nordic</option>
+      <option value="southern">Southern EU</option>
+    </select>
+    <select id="yearFilter" onchange="updateDashboard()">
+      <option value="2024">2024</option>
+      <option value="2023">2023</option>
+      <option value="both">2023 vs 2024</option>
+    </select>
+    <select id="categoryFilter" onchange="updateDashboard()">
+      <option value="all">All categories</option>
+      <option value="mowers">Lawn Mowers</option>
+      <option value="trimmers">Trimmers</option>
+      <option value="chainsaws">Chainsaws</option>
+      <option value="blowers">Blowers</option>
+    </select>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Revenue</div>
+      <div class="kpi-value" id="kpi-revenue">€4.2M</div>
+      <div class="kpi-delta up" id="kpi-rev-delta">▲ 12.4% vs prev year</div>
+      <div class="kpi-accent-bar"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Orders</div>
+      <div class="kpi-value" id="kpi-orders">18,340</div>
+      <div class="kpi-delta up" id="kpi-ord-delta">▲ 8.7% vs prev year</div>
+      <div class="kpi-accent-bar" style="background: var(--blue);"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Active Customers</div>
+      <div class="kpi-value" id="kpi-active">2,847</div>
+      <div class="kpi-delta up" id="kpi-act-delta">▲ 6.2% vs prev year</div>
+      <div class="kpi-accent-bar" style="background: #4ade80;"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Order Value</div>
+      <div class="kpi-value" id="kpi-aov">€229</div>
+      <div class="kpi-delta up" id="kpi-aov-delta">▲ 3.4% vs prev year</div>
+      <div class="kpi-accent-bar" style="background: var(--amber);"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Return Rate</div>
+      <div class="kpi-value" id="kpi-return">3.1%</div>
+      <div class="kpi-delta up" id="kpi-ret-delta">▼ 0.6pp improvement</div>
+      <div class="kpi-accent-bar" style="background: var(--accent2);"></div>
+    </div>
+  </div>
+
+  <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text3); margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #4ade80; display: inline-block;"></span>Active Customers = at least one order in the last 90 days</div>
+
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title">
+        Monthly revenue trend
+        <span class="period-tag" id="trend-period">Jan–Dec 2024</span>
+      </div>
+      <div class="chart-wrap" style="height: 220px;">
+        <canvas id="trendChart" role="img" aria-label="Monthly revenue trend line chart for 2024, peaking in June-July.">Monthly revenue from Jan to Dec 2024.</canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Revenue by category</div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+        <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:9px;height:9px;border-radius:2px;background:#ff9f2e;display:inline-block;"></span>Lawn Mowers</span>
+        <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:9px;height:9px;border-radius:2px;background:#60b8ff;display:inline-block;"></span>Trimmers</span>
+        <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:9px;height:9px;border-radius:2px;background:#ffb840;display:inline-block;"></span>Chainsaws</span>
+        <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:9px;height:9px;border-radius:2px;background:#b47fff;display:inline-block;"></span>Blowers</span>
+      </div>
+      <div class="chart-wrap" style="height: 180px;">
+        <canvas id="catChart" role="img" aria-label="Donut chart showing revenue by product category. Lawn mowers lead at 41%.">Revenue split: Mowers 41%, Trimmers 28%, Chainsaws 19%, Blowers 12%.</canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-row">
+    <div class="chart-card">
+      <div class="chart-title">Orders by region</div>
+      <div class="chart-wrap" style="height: 200px;">
+        <canvas id="regionChart" role="img" aria-label="Horizontal bar chart of orders by region. DACH leads.">Orders by region: DACH 6800, Benelux 4200, Nordic 3900, Southern EU 3440.</canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="section-header">
+        <div class="chart-title" style="margin:0">Top products by revenue</div>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Revenue</th>
+            <th>Orders</th>
+            <th>Δ YoY</th>
+          </tr>
+        </thead>
+        <tbody id="topProducts">
+          <tr><td>Pro-Mow 600X</td><td class="num">€842K</td><td class="num">2,340</td><td class="trend-up">+18.2%</td></tr>
+          <tr><td>RoboMow RS635</td><td class="num">€710K</td><td class="num">1,820</td><td class="trend-up">+31.4%</td></tr>
+          <tr><td>TrimmPro T48</td><td class="num">€540K</td><td class="num">3,100</td><td class="trend-up">+9.7%</td></tr>
+          <tr><td>ChainMax CS62</td><td class="num">€430K</td><td class="num">1,210</td><td class="trend-down">-4.1%</td></tr>
+          <tr><td>EcoBlower 240V</td><td class="num">€280K</td><td class="num">2,870</td><td class="trend-up">+22.8%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===== ETL TAB ===== -->
+<section id="tab-etl" class="tab-panel">
+
+  <div class="etl-header">
+    <h2>ETL Pipeline <span style="color:var(--accent)">Simulator</span></h2>
+    <p>Interactive simulation of a real-world sales data pipeline — from source extraction to analytics layer loading.</p>
+  </div>
+
+  <div class="pipeline-label">Pipeline stages</div>
+  <div class="pipeline-stages" id="pipelineStages">
+    <div class="stage" id="stage-extract">
+      <div class="stage-status status-idle" id="st-extract">idle</div>
+      <div class="stage-icon">📥</div>
+      <div class="stage-name">Extract</div>
+      <div class="stage-desc">Pull from SAP ERP, REST APIs, flat files (CSV/XLSX)</div>
+    </div>
+    <div class="stage" id="stage-validate">
+      <div class="stage-status status-idle" id="st-validate">idle</div>
+      <div class="stage-icon">🔍</div>
+      <div class="stage-name">Validate</div>
+      <div class="stage-desc">Schema checks, null detection, referential integrity</div>
+    </div>
+    <div class="stage" id="stage-transform">
+      <div class="stage-status status-idle" id="st-transform">idle</div>
+      <div class="stage-icon">⚙️</div>
+      <div class="stage-name">Transform</div>
+      <div class="stage-desc">Currency norm, deduplication, KPI computation, joins</div>
+    </div>
+    <div class="stage" id="stage-load">
+      <div class="stage-status status-idle" id="st-load">idle</div>
+      <div class="stage-icon">🚀</div>
+      <div class="stage-name">Load</div>
+      <div class="stage-desc">Upsert to BigQuery / SAP BW4HANA data mart</div>
+    </div>
+  </div>
+
+  <div class="metrics-row">
+    <div class="metric-mini">
+      <div class="m-label">Rows extracted</div>
+      <div class="m-val" id="m-rows">—</div>
+    </div>
+    <div class="metric-mini">
+      <div class="m-label">Rows rejected</div>
+      <div class="m-val" id="m-rejected" style="color:var(--amber)">—</div>
+    </div>
+    <div class="metric-mini">
+      <div class="m-label">Rows loaded</div>
+      <div class="m-val" id="m-loaded">—</div>
+    </div>
+    <div class="metric-mini">
+      <div class="m-label">Duration</div>
+      <div class="m-val" id="m-duration" style="color:var(--blue)">—</div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" id="runBtn" onclick="runPipeline()">▶ Run pipeline</button>
+    <button class="btn btn-ghost" id="resetBtn" onclick="resetPipeline()">Reset</button>
+    <span class="run-status-text" id="runStatusText"></span>
+  </div>
+
+  <div class="log-section">
+    <div class="log-header">
+      <span><span class="log-dot"></span>pipeline.log</span>
+      <span id="log-count">0 lines</span>
+    </div>
+    <div id="log-output">
+      <div class="log-line"><span class="log-ts">—</span><span class="log-info">Pipeline ready. Press "Run pipeline" to start.</span></div>
+    </div>
+  </div>
+
+</section>
+
+
+
+
+<!-- ===== LOGISTICS TAB ===== -->
+<section id="tab-logistics" class="tab-panel">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <div style="margin-bottom:1.5rem;">
+    <h2 style="font-family:var(--font-head);font-size:22px;font-weight:700;letter-spacing:-0.3px;margin-bottom:0.4rem;">Logistics <span style="color:var(--accent)">Route Optimizer</span></h2>
+    <p style="color:var(--text2);font-size:14px;font-weight:300;max-width:700px;">
+      Simulation of a real project built at STIGA S.p.a — queries SAP HANA for ship-to locations, geocodes addresses via Google API, calculates distances to shipping points, and flags EU vs non-EU routes. The map shows actual shipping points (warehouses) vs optimum assignment based on distance minimization.
+    </p>
+  </div>
+
+  <div style="background:var(--bg2);border:1px solid rgba(255,159,46,0.2);border-radius:10px;padding:0.9rem 1.2rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:10px;">
+    <span style="font-size:16px;">⚠️</span>
+    <span style="font-family:var(--font-mono);font-size:11px;color:var(--amber);">SIMULATION MODE — SAP HANA credentials and Google API key replaced with mock data. Full pipeline: <span style="color:var(--text2);">Origin_Destination_List.py → geocode → Route_API.py → DistanceTable insert</span></span>
+  </div>
+
+  <div class="kpi-row" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));margin-bottom:1.5rem;">
+    <div class="kpi-card">
+      <div class="kpi-label">Ship-To Locations</div>
+      <div class="kpi-value" style="font-size:22px;">24</div>
+      <div class="kpi-delta neutral">across EU</div>
+      <div class="kpi-accent-bar"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Shipping Points</div>
+      <div class="kpi-value" style="font-size:22px;">4</div>
+      <div class="kpi-delta neutral">warehouses</div>
+      <div class="kpi-accent-bar" style="background:var(--blue);"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Distance</div>
+      <div class="kpi-value" id="lg-avgdist" style="font-size:22px;">—</div>
+      <div class="kpi-delta neutral">km (actual)</div>
+      <div class="kpi-accent-bar" style="background:var(--amber);"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Optimum Avg</div>
+      <div class="kpi-value" id="lg-optdist" style="font-size:22px;">—</div>
+      <div class="kpi-delta up" id="lg-saving">calculating...</div>
+      <div class="kpi-accent-bar" style="background:#4ade80;"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Non-EU Routes</div>
+      <div class="kpi-value" style="font-size:22px;color:#ff6b6b;">3</div>
+      <div class="kpi-delta neutral">postal code only</div>
+      <div class="kpi-accent-bar" style="background:var(--danger);"></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;align-items:center;">
+    <span style="font-family:var(--font-mono);font-size:10px;color:var(--text3);">view:</span>
+    <button onclick="setMapView('actual')" id="btn-actual" style="font-family:var(--font-mono);font-size:11px;padding:6px 14px;border-radius:5px;background:rgba(255,159,46,0.15);color:var(--accent);border:1px solid rgba(255,159,46,0.3);cursor:pointer;">Actual assignments</button>
+    <button onclick="setMapView('optimum')" id="btn-optimum" style="font-family:var(--font-mono);font-size:11px;padding:6px 14px;border-radius:5px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);cursor:pointer;">Optimum assignments</button>
+    <button onclick="setMapView('both')" id="btn-both" style="font-family:var(--font-mono);font-size:11px;padding:6px 14px;border-radius:5px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);cursor:pointer;">Compare both</button>
+    <span style="font-family:var(--font-mono);font-size:10px;color:var(--text3);margin-left:8px;">
+      <span style="color:#ff9f2e">●</span> Warehouse &nbsp;
+      <span style="color:#60b8ff">●</span> Actual &nbsp;
+      <span style="color:#4ade80">●</span> Optimum &nbsp;
+      <span style="color:#ff6b6b">— </span>Actual route &nbsp;
+      <span style="color:#4ade80">— </span>Optimum route
+    </span>
+  </div>
+
+  <div id="logisticsMap" style="width:100%;height:480px;border-radius:10px;border:1px solid var(--border);overflow:hidden;margin-bottom:1.5rem;background:#1a1a2e;"></div>
+
+  <div class="chart-card">
+    <div class="chart-title">Distance comparison — actual vs optimum assignment per ship-to</div>
+    <div class="chart-wrap" style="height:260px;">
+      <canvas id="distanceCompareChart" role="img" aria-label="Bar chart comparing actual vs optimum shipping distances for each ship-to location.">Actual vs optimum distance comparison.</canvas>
+    </div>
+  </div>
+
+  <div style="margin-top:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+    <div style="background:var(--bg3);border-bottom:1px solid var(--border);padding:10px 1.2rem;font-family:var(--font-mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:8px;">
+      <span style="width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);display:inline-block;"></span>
+      pipeline simulation log
+    </div>
+    <div id="lg-log" style="padding:1rem 1.2rem;font-family:var(--font-mono);font-size:11px;color:var(--text3);line-height:1.9;max-height:200px;overflow-y:auto;"></div>
+  </div>
+
+</section>
+
+<!-- ===== STOCK COVERAGE TAB ===== -->
+<section id="tab-stock" class="tab-panel">
+
+  <div style="margin-bottom:1.5rem;">
+    <h2 style="font-family:var(--font-head);font-size:22px;font-weight:700;letter-spacing:-0.3px;margin-bottom:0.4rem;">Stock <span style="color:var(--accent)">Coverage</span> Analysis</h2>
+    <p style="color:var(--text2);font-size:14px;font-weight:300;">Top 10 products by demand — stock on hand vs. open demand across EU storage locations (IT10, DE10, FR10, ES10). Match rate color-coded: ≥80% green, 60–80% amber, &lt;60% red.</p>
+  </div>
+
+  <div class="filter-row">
+    <span class="filter-label">location:</span>
+    <select id="locFilter" onchange="updateStockChart()">
+      <option value="all">All locations</option>
+      <option value="IT10">IT10 — Italy</option>
+      <option value="DE10">DE10 — Germany</option>
+      <option value="FR10">FR10 — France</option>
+      <option value="ES10">ES10 — Spain</option>
+    </select>
+    <select id="familyFilter" onchange="updateStockChart()">
+      <option value="all">All product families</option>
+      <option value="ROBOT MOWERS">Robot Mowers</option>
+      <option value="RIDE-ON">Ride-On</option>
+      <option value="WALK BEHIND">Walk Behind</option>
+      <option value="HAND-HELD">Hand-Held</option>
+      <option value="FRONT MOWERS">Front Mowers</option>
+    </select>
+  </div>
+
+  <div class="kpi-row" style="grid-template-columns: repeat(auto-fit, minmax(140px,1fr));">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Stock Qty</div>
+      <div class="kpi-value" id="sk-total" style="font-size:22px;">68,340</div>
+      <div class="kpi-delta neutral">units on hand</div>
+      <div class="kpi-accent-bar"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Demand</div>
+      <div class="kpi-value" id="sk-demand" style="font-size:22px;">74,820</div>
+      <div class="kpi-delta neutral">units required</div>
+      <div class="kpi-accent-bar" style="background:var(--blue);"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Overall Match</div>
+      <div class="kpi-value" id="sk-match" style="font-size:22px;">91.3%</div>
+      <div class="kpi-delta up">▲ 3.1pp vs last yr</div>
+      <div class="kpi-accent-bar" style="background:#4ade80;"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Free Stock</div>
+      <div class="kpi-value" id="sk-free" style="font-size:22px;">12,840</div>
+      <div class="kpi-delta neutral">not yet allocated</div>
+      <div class="kpi-accent-bar" style="background:var(--amber);"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Coverage &lt;60%</div>
+      <div class="kpi-value" id="sk-risk" style="font-size:22px;color:#ff6b6b;">3</div>
+      <div class="kpi-delta down">SKUs at risk</div>
+      <div class="kpi-accent-bar" style="background:var(--danger);"></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+    <div class="chart-card">
+      <div class="chart-title">Stock on hand vs demand — top 10 SKUs</div>
+      <div class="chart-wrap" style="height:320px;">
+        <canvas id="coverageChart" role="img" aria-label="Grouped bar chart comparing stock on hand versus demand for top 10 SKUs across EU storage locations.">Stock vs demand comparison for top 10 SKUs.</canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Match rate % by product family</div>
+      <div style="display:flex;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+        <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:9px;height:9px;border-radius:2px;background:#4ade80;display:inline-block;"></span>≥80%</span>
+        <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:9px;height:9px;border-radius:2px;background:#ffd166;display:inline-block;"></span>60–80%</span>
+        <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)"><span style="width:9px;height:9px;border-radius:2px;background:#ff6b6b;display:inline-block;"></span>&lt;60%</span>
+      </div>
+      <div class="chart-wrap" style="height:290px;">
+        <canvas id="matchChart" role="img" aria-label="Horizontal bar chart showing match rate percentage by product family.">Match rate by product family.</canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-card" style="margin-bottom:1rem;">
+    <div class="chart-title">Coverage detail by storage location — top 10 SKUs</div>
+    <div style="overflow-x:auto;">
+      <table class="data-table" style="min-width:600px;">
+        <thead>
+          <tr>
+            <th>SKU / Product</th>
+            <th>Family</th>
+            <th>IT10</th>
+            <th>DE10</th>
+            <th>FR10</th>
+            <th>ES10</th>
+            <th>Total Stock</th>
+            <th>Demand</th>
+            <th>Match %</th>
+          </tr>
+        </thead>
+        <tbody id="coverageTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===== DOCUMENTS TAB ===== -->
+<section id="tab-docs" class="tab-panel">
+  <div style="margin-bottom:2rem;">
+    <h2 style="font-family:var(--font-head);font-size:22px;font-weight:700;letter-spacing:-0.3px;margin-bottom:0.4rem;">Documents &amp; <span style="color:var(--accent)">References</span></h2>
+    <p style="color:var(--text2);font-size:14px;font-weight:300;">Real work samples and professional credentials. Upload all PDFs to the same folder as index.html on GitHub Pages — links work automatically.</p>
+  </div>
+
+  <div style="margin-bottom:2rem;">
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;">SAC Dashboard Portfolio — 6 dashboards</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;">
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.3rem 1.5rem;transition:border-color 0.2s;" onmouseenter="this.style.borderColor='rgba(255,159,46,0.3)'" onmouseleave="this.style.borderColor=''">
+        <div style="font-size:20px;margin-bottom:0.6rem;">📊</div>
+        <div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">CRM Dashboard</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent);margin-bottom:8px;">SAP Analytics Cloud · Salesforce</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:1rem;">8-page CRM suite: Sales Summary, Targets, Order Intake, Dealer Visits, Purchase Groups, and Pre-Season tracking. Salesforce + SAP ERP integration.</div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/CRM%20Dashboard.pdf" target="_blank" style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:rgba(255,159,46,0.12);color:var(--accent);border:1px solid rgba(255,159,46,0.25);text-decoration:none;">↗ View</a>
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/CRM%20Dashboard.pdf" download style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);text-decoration:none;">⬇ Download</a>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.3rem 1.5rem;transition:border-color 0.2s;" onmouseenter="this.style.borderColor='rgba(255,159,46,0.3)'" onmouseleave="this.style.borderColor=''">
+        <div style="font-size:20px;margin-bottom:0.6rem;">🎯</div>
+        <div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">Forecast Accuracy Dashboard</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent);margin-bottom:8px;">SAP Analytics Cloud · SKU Level</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:1rem;">Weighted forecast accuracy at SKU level across 18 sales regions. Cumulative N, N-3, N-6 horizon comparison with graphical and table views.</div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/Forecast%20Accuracy%20Dashboard.pdf" target="_blank" style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:rgba(255,159,46,0.12);color:var(--accent);border:1px solid rgba(255,159,46,0.25);text-decoration:none;">↗ View</a>
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/Forecast%20Accuracy%20Dashboard.pdf" download style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);text-decoration:none;">⬇ Download</a>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.3rem 1.5rem;transition:border-color 0.2s;" onmouseenter="this.style.borderColor='rgba(255,159,46,0.3)'" onmouseleave="this.style.borderColor=''">
+        <div style="font-size:20px;margin-bottom:0.6rem;">📦</div>
+        <div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">Forecast Accuracy — Order Intake</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent);margin-bottom:8px;">SAP Analytics Cloud · Order Intake</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:1rem;">Demand vs Order Intake matrix by approval/creation month. Weighted accuracy N and N-3 with delivery date logic methodology.</div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/Forecast%20Accuracy%20OIT%20Dashboard.pdf" target="_blank" style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:rgba(255,159,46,0.12);color:var(--accent);border:1px solid rgba(255,159,46,0.25);text-decoration:none;">↗ View</a>
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/Forecast%20Accuracy%20OIT%20Dashboard.pdf" download style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);text-decoration:none;">⬇ Download</a>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.3rem 1.5rem;transition:border-color 0.2s;" onmouseenter="this.style.borderColor='rgba(255,159,46,0.3)'" onmouseleave="this.style.borderColor=''">
+        <div style="font-size:20px;margin-bottom:0.6rem;">🔖</div>
+        <div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">SKU Status Dashboard</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent);margin-bottom:8px;">SAP Analytics Cloud · Supply Chain</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:1rem;">Phase In / Active / Phase Out / Obsolete SKU tracking across 15 EU plants. Demand coverage, stock coverage, and gap analysis by material group.</div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/SKU%20Status%20Dashboard.pdf" target="_blank" style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:rgba(255,159,46,0.12);color:var(--accent);border:1px solid rgba(255,159,46,0.25);text-decoration:none;">↗ View</a>
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/SKU%20Status%20Dashboard.pdf" download style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);text-decoration:none;">⬇ Download</a>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.3rem 1.5rem;transition:border-color 0.2s;" onmouseenter="this.style.borderColor='rgba(255,159,46,0.3)'" onmouseleave="this.style.borderColor=''">
+        <div style="font-size:20px;margin-bottom:0.6rem;">🏭</div>
+        <div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">Stock Dashboard by Plant</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent);margin-bottom:8px;">SAP Analytics Cloud · Inventory</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:1rem;">Total stock, stock on hand, and GIT by plant (IT10, DE10, ES10, FR10). Match/Free Stock heat map, top 10 materials, demand vs stock value in EUR.</div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/Stock%20Dashboard.pdf" target="_blank" style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:rgba(255,159,46,0.12);color:var(--accent);border:1px solid rgba(255,159,46,0.25);text-decoration:none;">↗ View</a>
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/Stock%20Dashboard.pdf" download style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);text-decoration:none;">⬇ Download</a>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.3rem 1.5rem;transition:border-color 0.2s;" onmouseenter="this.style.borderColor='rgba(255,159,46,0.3)'" onmouseleave="this.style.borderColor=''">
+        <div style="font-size:20px;margin-bottom:0.6rem;">📈</div>
+        <div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">Weekly STIGA KPI Report</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent);margin-bottom:8px;">SAP Analytics Cloud · Executive</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:1rem;">12-page executive KPI deck: Lead, Live and Lag indicators, Robot Mower strategic product view, Sales/Order Intake/Visit details, Ship-To retention.</div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/Weekly_STIGA_KPI.pdf" target="_blank" style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:rgba(255,159,46,0.12);color:var(--accent);border:1px solid rgba(255,159,46,0.25);text-decoration:none;">↗ View</a>
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/Weekly_STIGA_KPI.pdf" download style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);text-decoration:none;">⬇ Download</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="margin-bottom:2rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;">CV &amp; Reference Letters</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;">
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.3rem 1.5rem;transition:border-color 0.2s;" onmouseenter="this.style.borderColor='rgba(255,159,46,0.3)'" onmouseleave="this.style.borderColor=''">
+        <div style="font-size:20px;margin-bottom:0.6rem;">📄</div>
+        <div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">Curriculum Vitae</div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--accent);margin-bottom:8px;">Data &amp; BI Analyst · Munich</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:1rem;">STIGA S.p.a (Italy) · Otokar (Turkey). M.Sc. Business Administration, University of Padova. Full-time work permit in Germany.</div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/CV_Goktug_Yaman.pdf" target="_blank" style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:rgba(255,159,46,0.12);color:var(--accent);border:1px solid rgba(255,159,46,0.25);text-decoration:none;">↗ View</a>
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/CV_Goktug_Yaman.pdf" download style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);text-decoration:none;">⬇ Download</a>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.3rem 1.5rem;transition:border-color 0.2s;" onmouseenter="this.style.borderColor='rgba(255,159,46,0.3)'" onmouseleave="this.style.borderColor=''">
+        <div style="font-size:20px;margin-bottom:0.6rem;">✉️</div>
+        <div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">Andrea Frassetto</div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--accent);margin-bottom:8px;">Business Process Improvement &amp; BI Director · STIGA S.p.a</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:1rem;">"The greatest talent I have encountered in my professional career." — Reached senior consultant level in 1.5 years. SAP BI, Python, autonomous project delivery.</div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/Andrea_Frassetto_Reference.pdf" target="_blank" style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:rgba(255,159,46,0.12);color:var(--accent);border:1px solid rgba(255,159,46,0.25);text-decoration:none;">↗ View</a>
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/Andrea_Frassetto_Reference.pdf" download style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);text-decoration:none;">⬇ Download</a>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.3rem 1.5rem;transition:border-color 0.2s;" onmouseenter="this.style.borderColor='rgba(255,159,46,0.3)'" onmouseleave="this.style.borderColor=''">
+        <div style="font-size:20px;margin-bottom:0.6rem;">✉️</div>
+        <div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">Dilara Onat</div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--accent);margin-bottom:8px;">Compensation &amp; Benefits Leader · Otokar</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:1rem;">Highlights analytical skills, initiative in the zero-based budget program, HR data systems improvements, and financial reporting at a defense &amp; automotive group.</div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/Dilara_Onat_Reference.pdf" target="_blank" style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:rgba(255,159,46,0.12);color:var(--accent);border:1px solid rgba(255,159,46,0.25);text-decoration:none;">↗ View</a>
+          <a href="https://raw.githubusercontent.com/goktugyaman/portfolio/main/Dilara_Onat_Reference.pdf" download style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:5px 12px;border-radius:5px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);text-decoration:none;">⬇ Download</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="padding-top:1.5rem;border-top:1px solid var(--border);">
+    <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.8rem;">GitHub Pages setup — 5 steps</div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.2rem 1.4rem;font-family:var(--font-mono);font-size:12px;color:var(--text2);line-height:2.2;">
+      <span style="color:var(--text3)">1.</span> Create a public GitHub repo — e.g. <span style="color:var(--accent)">goktug-portfolio</span><br>
+      <span style="color:var(--text3)">2.</span> Upload all files to root: <span style="color:var(--accent)">index.html</span> + all PDFs in the same folder<br>
+      <span style="color:var(--text3)">3.</span> Rename <span style="color:var(--accent)">portfolio.html</span> → <span style="color:var(--accent)">index.html</span> before uploading<br>
+      <span style="color:var(--text3)">4.</span> Settings → Pages → Source: Deploy from branch → main → / (root)<br>
+      <span style="color:var(--text3)">5.</span> Live URL: <span style="color:var(--amber)">[github-username].github.io/goktug-portfolio</span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+// ===== TAB SWITCHING =====
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ===== DASHBOARD DATA =====
+const DATA = {
+  all: {
+    2024: {
+      revenue: '€4.2M', orders: '18,340', aov: '€229', ret: '3.1%', active: '2,847',
+      revDelta: '▲ 12.4%', ordDelta: '▲ 8.7%', aovDelta: '▲ 3.4%', retDelta: '▼ 0.6pp', actDelta: '▲ 6.2%',
+      trend: [210,195,320,440,580,690,720,610,480,350,260,340],
+      catData: [41, 28, 19, 12],
+      regionData: [6800, 4200, 3900, 3440],
+    },
+    2023: {
+      revenue: '€3.7M', orders: '16,870', aov: '€221', ret: '3.7%', active: '2,681',
+      revDelta: '▲ 7.1%', ordDelta: '▲ 5.2%', aovDelta: '▲ 1.8%', retDelta: '▼ 0.3pp', actDelta: '▲ 4.1%',
+      trend: [180,175,290,400,510,620,640,560,430,310,230,300],
+      catData: [38, 30, 20, 12],
+      regionData: [6200, 3800, 3500, 3370],
+    }
+  },
+  dach: {
+    2024: {
+      revenue: '€1.6M', orders: '6,820', aov: '€235', ret: '2.8%', active: '1,140',
+      revDelta: '▲ 15.1%', ordDelta: '▲ 11.2%', aovDelta: '▲ 3.5%', retDelta: '▼ 0.8pp', actDelta: '▲ 9.3%',
+      trend: [78,72,120,168,218,260,272,230,182,132,98,130],
+      catData: [44, 26, 18, 12],
+      regionData: [6820, 0, 0, 0],
+    }
+  }
+};
+
+let trendChart, catChart, regionChart;
+
+function getDataForFilters() {
+  const region = document.getElementById('regionFilter').value;
+  const year = document.getElementById('yearFilter').value;
+  const src = DATA[region] || DATA['all'];
+  return src[year === 'both' ? '2024' : year] || src['2024'];
+}
+
+function updateDashboard() {
+  const d = getDataForFilters();
+  document.getElementById('kpi-revenue').textContent = d.revenue;
+  document.getElementById('kpi-orders').textContent = d.orders;
+  document.getElementById('kpi-aov').textContent = d.aov;
+  document.getElementById('kpi-return').textContent = d.ret;
+  if (document.getElementById('kpi-active')) document.getElementById('kpi-active').textContent = d.active;
+  if (document.getElementById('kpi-act-delta')) document.getElementById('kpi-act-delta').textContent = (d.actDelta || '') + ' vs prev year';
+  document.getElementById('kpi-rev-delta').textContent = d.revDelta + ' vs prev year';
+  document.getElementById('kpi-ord-delta').textContent = d.ordDelta + ' vs prev year';
+  document.getElementById('kpi-aov-delta').textContent = d.aovDelta + ' vs prev year';
+  document.getElementById('kpi-ret-delta').textContent = d.retDelta + ' improvement';
+
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const year = document.getElementById('yearFilter').value;
+
+  if (trendChart) {
+    if (year === 'both') {
+      const d23 = (DATA[document.getElementById('regionFilter').value] || DATA['all'])['2023'] || DATA['all']['2023'];
+      trendChart.data.datasets = [
+        { label: '2024', data: d.trend, borderColor: '#ff9f2e', backgroundColor: 'rgba(255,159,46,0.07)', fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#ff9f2e', borderWidth: 2 },
+        { label: '2023', data: d23.trend, borderColor: '#60b8ff', backgroundColor: 'rgba(96,184,255,0.04)', fill: false, tension: 0.4, pointRadius: 2, pointBackgroundColor: '#60b8ff', borderWidth: 1.5, borderDash: [4,3] }
+      ];
+      document.getElementById('trend-period').textContent = '2023 vs 2024';
+    } else {
+      trendChart.data.datasets = [
+        { label: year, data: d.trend, borderColor: '#ff9f2e', backgroundColor: 'rgba(255,159,46,0.07)', fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#ff9f2e', borderWidth: 2 }
+      ];
+      document.getElementById('trend-period').textContent = 'Jan–Dec ' + year;
+    }
+    trendChart.update();
+  }
+
+  if (catChart) {
+    catChart.data.datasets[0].data = d.catData;
+    catChart.update();
+  }
+
+  if (regionChart) {
+    regionChart.data.datasets[0].data = d.regionData;
+    regionChart.update();
+  }
+}
+
+function initCharts() {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const d = getDataForFilters();
+
+  const gridColor = 'rgba(255,255,255,0.05)';
+  const tickColor = '#6b5c47';
+
+  trendChart = new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [{
+        label: '2024',
+        data: d.trend,
+        borderColor: '#ff9f2e',
+        backgroundColor: 'rgba(255,159,46,0.07)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 3,
+        pointBackgroundColor: '#ff9f2e',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#221c14', borderColor: 'rgba(255,159,46,0.2)', borderWidth: 1, titleColor: '#ede8e0', bodyColor: '#9e8f7a', callbacks: { label: ctx => ' €' + ctx.raw + 'K' } } },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'DM Mono', size: 10 } } },
+        y: { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'DM Mono', size: 10 }, callback: v => '€' + v + 'K' } }
+      }
+    }
+  });
+
+  catChart = new Chart(document.getElementById('catChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Lawn Mowers', 'Trimmers', 'Chainsaws', 'Blowers'],
+      datasets: [{
+        data: d.catData,
+        backgroundColor: ['#ff9f2e', '#ffd166', '#60b8ff', '#c97520'],
+        borderColor: '#181410',
+        borderWidth: 2,
+        hoverOffset: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '65%',
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#221c14', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, titleColor: '#ede8e0', bodyColor: '#9e8f7a', callbacks: { label: ctx => ' ' + ctx.label + ': ' + ctx.raw + '%' } } }
+    }
+  });
+
+  regionChart = new Chart(document.getElementById('regionChart'), {
+    type: 'bar',
+    data: {
+      labels: ['DACH', 'Benelux', 'Nordic', 'Southern EU'],
+      datasets: [{
+        data: d.regionData,
+        backgroundColor: ['rgba(255,159,46,0.75)', 'rgba(255,159,46,0.55)', 'rgba(255,159,46,0.35)', 'rgba(255,159,46,0.2)'],
+        borderRadius: 4,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#221c14', borderColor: 'rgba(255,159,46,0.2)', borderWidth: 1, titleColor: '#ede8e0', bodyColor: '#9e8f7a' } },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'DM Mono', size: 10 }, callback: v => v.toLocaleString() } },
+        y: { grid: { display: false }, ticks: { color: '#9e8f7a', font: { family: 'Inter', size: 12 } } }
+      }
+    }
+  });
+}
+
+// ===== ETL PIPELINE =====
+let running = false;
+let logLines = 0;
+let startTime;
+
+const PIPELINE_LOGS = [
+  { stage: 'extract', delay: 400, type: 'info', msg: '[INIT] Pipeline job started: sales_eu_daily_etl_v3.2' },
+  { stage: 'extract', delay: 600, type: 'info', msg: '[EXTRACT] Connecting to SAP ERP endpoint → erp.stiga.local:8443' },
+  { stage: 'extract', delay: 900, type: 'success', msg: '[EXTRACT] SAP connection established (auth: service_account)' },
+  { stage: 'extract', delay: 700, type: 'data', msg: '[EXTRACT] Pulling orders table: sales.eu_orders_2024... 14,820 rows' },
+  { stage: 'extract', delay: 500, type: 'data', msg: '[EXTRACT] Pulling returns table: sales.eu_returns_2024... 460 rows' },
+  { stage: 'extract', delay: 600, type: 'data', msg: '[EXTRACT] Calling product catalog API (REST) → /api/v2/products/eu' },
+  { stage: 'extract', delay: 400, type: 'success', msg: '[EXTRACT] API response: 200 OK | 312 product records' },
+  { stage: 'extract', delay: 300, type: 'success', msg: '[EXTRACT] Stage complete. Total rows: 15,592' },
+
+  { stage: 'validate', delay: 500, type: 'info', msg: '[VALIDATE] Running schema validation checks...' },
+  { stage: 'validate', delay: 400, type: 'info', msg: '[VALIDATE] Checking NOT NULL constraints on [order_id, sku, region, amount]' },
+  { stage: 'validate', delay: 700, type: 'warning', msg: '[VALIDATE] ⚠ 47 rows missing region_code → flagged for imputation' },
+  { stage: 'validate', delay: 400, type: 'warning', msg: '[VALIDATE] ⚠ 15 rows: amount ≤ 0 → tagged as REJECT' },
+  { stage: 'validate', delay: 500, type: 'info', msg: '[VALIDATE] Running referential integrity: order_id → returns table' },
+  { stage: 'validate', delay: 400, type: 'success', msg: '[VALIDATE] 460/460 return records matched to valid orders ✓' },
+  { stage: 'validate', delay: 300, type: 'success', msg: '[VALIDATE] Stage complete. Rejected: 15 rows | Flagged: 47 rows' },
+
+  { stage: 'transform', delay: 500, type: 'info', msg: '[TRANSFORM] Normalizing currencies → EUR base (ECB rates 2024-12-31)' },
+  { stage: 'transform', delay: 600, type: 'data', msg: '[TRANSFORM] GBP→EUR: 892 rows | CHF→EUR: 340 rows | SEK→EUR: 210 rows' },
+  { stage: 'transform', delay: 500, type: 'info', msg: '[TRANSFORM] Deduplication: checking order_id + sku composite key...' },
+  { stage: 'transform', delay: 400, type: 'warning', msg: '[TRANSFORM] ⚠ 23 duplicate rows found → keeping latest timestamp' },
+  { stage: 'transform', delay: 600, type: 'info', msg: '[TRANSFORM] Imputing 47 missing region_codes via customer_id lookup table' },
+  { stage: 'transform', delay: 400, type: 'success', msg: '[TRANSFORM] 44/47 imputed ✓ | 3 rows set to region: UNKNOWN' },
+  { stage: 'transform', delay: 500, type: 'data', msg: '[TRANSFORM] Computing KPIs: revenue_eur, order_value_bucket, margin_pct' },
+  { stage: 'transform', delay: 400, type: 'data', msg: '[TRANSFORM] Joining with product master: category, segment, launch_year' },
+  { stage: 'transform', delay: 300, type: 'success', msg: '[TRANSFORM] Stage complete. Output rows: 15,554' },
+
+  { stage: 'load', delay: 500, type: 'info', msg: '[LOAD] Connecting to BigQuery: project.sales_mart.eu_orders_final' },
+  { stage: 'load', delay: 400, type: 'success', msg: '[LOAD] Connection OK | Target table exists | Mode: UPSERT on order_id' },
+  { stage: 'load', delay: 700, type: 'data', msg: '[LOAD] Writing batch 1/3: rows 1–5,000... OK' },
+  { stage: 'load', delay: 600, type: 'data', msg: '[LOAD] Writing batch 2/3: rows 5,001–10,000... OK' },
+  { stage: 'load', delay: 600, type: 'data', msg: '[LOAD] Writing batch 3/3: rows 10,001–15,554... OK' },
+  { stage: 'load', delay: 400, type: 'info', msg: '[LOAD] Refreshing Power BI dataset semantic model cache...' },
+  { stage: 'load', delay: 300, type: 'success', msg: '[LOAD] Power BI refresh triggered ✓' },
+  { stage: 'load', delay: 200, type: 'success', msg: '[LOAD] Stage complete. 15,554 rows upserted to data mart.' },
+  { stage: 'done', delay: 300, type: 'success', msg: '[DONE] ✅ Pipeline job completed successfully.' },
+];
+
+function getTs() {
+  const now = new Date();
+  return now.toTimeString().slice(0,8) + '.' + String(now.getMilliseconds()).padStart(3,'0');
+}
+
+function addLog(msg, type) {
+  const out = document.getElementById('log-output');
+  const line = document.createElement('div');
+  line.className = 'log-line';
+  line.innerHTML = `<span class="log-ts">${getTs()}</span><span class="log-${type}">${msg}</span>`;
+  out.appendChild(line);
+  out.scrollTop = out.scrollHeight;
+  logLines++;
+  document.getElementById('log-count').textContent = logLines + ' lines';
+}
+
+function setStageStatus(stageId, status) {
+  const el = document.getElementById('stage-' + stageId);
+  const st = document.getElementById('st-' + stageId);
+  if (!el) return;
+  el.className = 'stage ' + (status === 'running' ? 'active' : status === 'done' ? 'done' : status === 'error' ? 'error' : '');
+  st.className = 'stage-status status-' + status;
+  st.textContent = status;
+}
+
+async function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function runPipeline() {
+  if (running) return;
+  running = true;
+  startTime = Date.now();
+  document.getElementById('runBtn').disabled = true;
+  document.getElementById('runStatusText').textContent = 'Running...';
+  document.getElementById('log-output').innerHTML = '';
+  logLines = 0;
+
+  document.getElementById('m-rows').textContent = '—';
+  document.getElementById('m-rejected').textContent = '—';
+  document.getElementById('m-loaded').textContent = '—';
+  document.getElementById('m-duration').textContent = '—';
+
+  let currentStage = '';
+
+  for (const entry of PIPELINE_LOGS) {
+    if (entry.stage !== currentStage && entry.stage !== 'done') {
+      if (currentStage) setStageStatus(currentStage, 'done');
+      currentStage = entry.stage;
+      setStageStatus(currentStage, 'running');
+    }
+    await sleep(entry.delay);
+    addLog(entry.msg, entry.type);
+
+    if (entry.stage === 'extract' && entry.msg.includes('Total rows')) {
+      document.getElementById('m-rows').textContent = '15,592';
+    }
+    if (entry.stage === 'validate' && entry.msg.includes('Rejected')) {
+      document.getElementById('m-rejected').textContent = '15';
+    }
+    if (entry.stage === 'load' && entry.msg.includes('upserted')) {
+      document.getElementById('m-loaded').textContent = '15,554';
+    }
+  }
+
+  if (currentStage) setStageStatus(currentStage, 'done');
+  const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+  document.getElementById('m-duration').textContent = elapsed + 's';
+  document.getElementById('runStatusText').textContent = 'Completed in ' + elapsed + 's';
+  document.getElementById('runBtn').disabled = false;
+  running = false;
+}
+
+function resetPipeline() {
+  if (running) return;
+  ['extract','validate','transform','load'].forEach(s => setStageStatus(s, 'idle'));
+  document.getElementById('log-output').innerHTML = '<div class="log-line"><span class="log-ts">—</span><span class="log-info">Pipeline ready. Press "Run pipeline" to start.</span></div>';
+  logLines = 0;
+  document.getElementById('log-count').textContent = '0 lines';
+  document.getElementById('m-rows').textContent = '—';
+  document.getElementById('m-rejected').textContent = '—';
+  document.getElementById('m-loaded').textContent = '—';
+  document.getElementById('m-duration').textContent = '—';
+  document.getElementById('runStatusText').textContent = '';
+}
+
+
+// ===== STOCK COVERAGE =====
+const STOCK_DATA = [
+  { sku: 'RS 635 eConnect', family: 'ROBOT MOWERS', it10: 340, de10: 180, fr10: 95, es10: 60, demand: 820 },
+  { sku: 'E 650 eConnect', family: 'ROBOT MOWERS', it10: 210, de10: 140, fr10: 80, es10: 45, demand: 560 },
+  { sku: 'RG 3 eConnect', family: 'ROBOT MOWERS', it10: 88, de10: 55, fr10: 30, es10: 18, demand: 310 },
+  { sku: 'Ride-On G 145', family: 'RIDE-ON', it10: 920, de10: 480, fr10: 310, es10: 195, demand: 2200 },
+  { sku: 'Ride-On G 2366', family: 'RIDE-ON', it10: 560, de10: 290, fr10: 188, es10: 120, demand: 1350 },
+  { sku: 'SB 348e', family: 'WALK BEHIND', it10: 1840, de10: 960, fr10: 620, es10: 390, demand: 4100 },
+  { sku: 'SB 448e', family: 'WALK BEHIND', it10: 1200, de10: 680, fr10: 410, es10: 240, demand: 3200 },
+  { sku: 'HST 48', family: 'HAND-HELD', it10: 2100, de10: 1300, fr10: 840, es10: 510, demand: 5500 },
+  { sku: 'BL 200e', family: 'HAND-HELD', it10: 980, de10: 540, fr10: 320, es10: 180, demand: 2200 },
+  { sku: 'FM 2WD 4121', family: 'FRONT MOWERS', it10: 95, de10: 58, fr10: 34, es10: 19, demand: 280 },
+];
+
+function getFilteredStock() {
+  const loc = document.getElementById('locFilter').value;
+  const fam = document.getElementById('familyFilter').value;
+  return STOCK_DATA.filter(d => fam === 'all' || d.family === fam).map(d => {
+    let stock;
+    if (loc === 'all') stock = d.it10 + d.de10 + d.fr10 + d.es10;
+    else if (loc === 'IT10') stock = d.it10;
+    else if (loc === 'DE10') stock = d.de10;
+    else if (loc === 'FR10') stock = d.fr10;
+    else stock = d.es10;
+    const demandScale = loc === 'all' ? 1 : 0.28;
+    const demand = Math.round(d.demand * demandScale);
+    return { ...d, stockTotal: stock, demandAdj: demand, match: Math.min(100, Math.round(stock / demand * 100)) };
+  });
+}
+
+function matchColor(pct) {
+  if (pct >= 80) return '#4ade80';
+  if (pct >= 60) return '#ffd166';
+  return '#ff6b6b';
+}
+
+let coverageChart, matchChart2;
+
+function initStockCharts() {
+  const data = getFilteredStock();
+  const labels = data.map(d => d.sku.length > 14 ? d.sku.slice(0,14)+'…' : d.sku);
+  const gridColor = 'rgba(255,255,255,0.05)';
+  const tickColor = '#6b5c47';
+
+  coverageChart = new Chart(document.getElementById('coverageChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Stock on hand', data: data.map(d => d.stockTotal), backgroundColor: 'rgba(255,159,46,0.75)', borderRadius: 3, borderSkipped: false },
+        { label: 'Demand', data: data.map(d => d.demandAdj), backgroundColor: 'rgba(96,184,255,0.5)', borderRadius: 3, borderSkipped: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { backgroundColor: '#221c14', borderColor: 'rgba(255,159,46,0.2)', borderWidth: 1, titleColor: '#ede8e0', bodyColor: '#9e8f7a' }
+      },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'DM Mono', size: 9 }, maxRotation: 35 } },
+        y: { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'DM Mono', size: 10 }, callback: v => v >= 1000 ? (v/1000).toFixed(1)+'K' : v } }
+      }
+    }
+  });
+
+  const families = [...new Set(STOCK_DATA.map(d => d.family))];
+  const famMatch = families.map(f => {
+    const items = STOCK_DATA.filter(d => d.family === f);
+    const s = items.reduce((a,d) => a + d.it10+d.de10+d.fr10+d.es10, 0);
+    const dem = items.reduce((a,d) => a + d.demand, 0);
+    return Math.min(100, Math.round(s / dem * 100));
+  });
+
+  matchChart2 = new Chart(document.getElementById('matchChart'), {
+    type: 'bar',
+    data: {
+      labels: families.map(f => f.length > 16 ? f.slice(0,16)+'…' : f),
+      datasets: [{
+        data: famMatch,
+        backgroundColor: famMatch.map(v => matchColor(v) + 'cc'),
+        borderRadius: 4, borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: {
+        legend: { display: false },
+        tooltip: { backgroundColor: '#221c14', borderColor: 'rgba(255,159,46,0.2)', borderWidth: 1, titleColor: '#ede8e0', bodyColor: '#9e8f7a', callbacks: { label: ctx => ' Match: ' + ctx.raw + '%' } }
+      },
+      scales: {
+        x: { grid: { color: gridColor }, min: 0, max: 110, ticks: { color: tickColor, font: { family: 'DM Mono', size: 10 }, callback: v => v + '%' } },
+        y: { grid: { display: false }, ticks: { color: '#9e8f7a', font: { family: 'Inter', size: 11 } } }
+      }
+    }
+  });
+
+  renderCoverageTable(data);
+  updateStockKPIs(data);
+}
+
+function renderCoverageTable(data) {
+  const tbody = document.getElementById('coverageTable');
+  if (!tbody) return;
+  const loc = document.getElementById('locFilter').value;
+  tbody.innerHTML = data.map(d => {
+    const mc = matchColor(d.match);
+    const matchBadge = `<span style="font-family:var(--font-mono);font-size:11px;font-weight:500;padding:2px 8px;border-radius:4px;background:${mc}22;color:${mc};">${d.match}%</span>`;
+    const it = loc==='all'||loc==='IT10' ? d.it10.toLocaleString() : '—';
+    const de = loc==='all'||loc==='DE10' ? d.de10.toLocaleString() : '—';
+    const fr = loc==='all'||loc==='FR10' ? d.fr10.toLocaleString() : '—';
+    const es = loc==='all'||loc==='ES10' ? d.es10.toLocaleString() : '—';
+    return `<tr>
+      <td style="font-weight:500;color:var(--text)">${d.sku}</td>
+      <td style="font-family:var(--font-mono);font-size:11px;color:var(--accent)">${d.family}</td>
+      <td class="num">${it}</td>
+      <td class="num">${de}</td>
+      <td class="num">${fr}</td>
+      <td class="num">${es}</td>
+      <td class="num">${d.stockTotal.toLocaleString()}</td>
+      <td class="num">${d.demandAdj.toLocaleString()}</td>
+      <td>${matchBadge}</td>
+    </tr>`;
+  }).join('');
+}
+
+function updateStockKPIs(data) {
+  const totalStock = data.reduce((a,d) => a + d.stockTotal, 0);
+  const totalDemand = data.reduce((a,d) => a + d.demandAdj, 0);
+  const overall = Math.min(100, Math.round(totalStock / totalDemand * 100));
+  const free = Math.max(0, totalStock - totalDemand);
+  const atRisk = data.filter(d => d.match < 60).length;
+  document.getElementById('sk-total').textContent = totalStock.toLocaleString();
+  document.getElementById('sk-demand').textContent = totalDemand.toLocaleString();
+  document.getElementById('sk-match').textContent = overall + '%';
+  document.getElementById('sk-free').textContent = free.toLocaleString();
+  document.getElementById('sk-risk').textContent = atRisk;
+}
+
+function updateStockChart() {
+  const data = getFilteredStock();
+  if (coverageChart) {
+    coverageChart.data.labels = data.map(d => d.sku.length > 14 ? d.sku.slice(0,14)+'…' : d.sku);
+    coverageChart.data.datasets[0].data = data.map(d => d.stockTotal);
+    coverageChart.data.datasets[1].data = data.map(d => d.demandAdj);
+    coverageChart.update();
+  }
+  renderCoverageTable(data);
+  updateStockKPIs(data);
+}
+
+// Init stock charts when tab first opened
+document.querySelector('[onclick*="stock"]') && document.querySelector('[onclick*="stock"]').addEventListener('click', function() {
+  if (!coverageChart) setTimeout(initStockCharts, 50);
+});
+
+
+}
+
+
+// ===== LOGISTICS MAP =====
+const WAREHOUSES = [
+  { id: 'IT10', name: 'IT10 — Castelfranco Veneto', lat: 45.67, lon: 11.92, color: '#ff9f2e' },
+  { id: 'DE10', name: 'DE10 — Augsburg', lat: 48.37, lon: 10.90, color: '#ffd166' },
+  { id: 'FR10', name: 'FR10 — Lyon', lat: 45.74, lon: 4.84, color: '#60b8ff' },
+  { id: 'ES10', name: 'ES10 — Barcelona', lat: 41.39, lon: 2.15, color: '#b47fff' },
+];
+
+const SHIPTO = [
+  {id:'S001',name:'Bauhaus Stuttgart',lat:48.78,lon:9.18,actual:'DE10',opt:'DE10'},
+  {id:'S002',name:'Hornbach München',lat:48.14,lon:11.58,actual:'IT10',opt:'DE10'},
+  {id:'S003',name:'OBI Hamburg',lat:53.55,lon:9.99,actual:'DE10',opt:'DE10'},
+  {id:'S004',name:'Leroy Merlin Paris',lat:48.85,lon:2.35,actual:'IT10',opt:'FR10'},
+  {id:'S005',name:'Castorama Lyon',lat:45.76,lon:4.83,actual:'FR10',opt:'FR10'},
+  {id:'S006',name:'Bricodepot Madrid',lat:40.42,lon:-3.70,actual:'ES10',opt:'ES10'},
+  {id:'S007',name:'Leroy Merlin Barcelona',lat:41.38,lon:2.18,actual:'IT10',opt:'ES10'},
+  {id:'S008',name:'Jumbo Amsterdam',lat:52.37,lon:4.90,actual:'DE10',opt:'DE10'},
+  {id:'S009',name:'Gamma Rotterdam',lat:51.92,lon:4.47,actual:'IT10',opt:'DE10'},
+  {id:'S010',name:'Brico Plan-it Brussels',lat:50.85,lon:4.35,actual:'FR10',opt:'FR10'},
+  {id:'S011',name:'Praktiker Vienna',lat:48.21,lon:16.37,actual:'IT10',opt:'IT10'},
+  {id:'S012',name:'OBI Prague',lat:50.08,lon:14.44,actual:'DE10',opt:'IT10'},
+  {id:'S013',name:'Coop Bau+Hobby Zürich',lat:47.38,lon:8.54,actual:'IT10',opt:'IT10'},
+  {id:'S014',name:'Brico Oslo',lat:59.91,lon:10.75,actual:'DE10',opt:'DE10'},
+  {id:'S015',name:'Byggmax Stockholm',lat:59.33,lon:18.07,actual:'DE10',opt:'DE10'},
+  {id:'S016',name:'Leroy Merlin Warsaw',lat:52.23,lon:21.01,actual:'DE10',opt:'DE10'},
+  {id:'S017',name:'OBI Krakow',lat:50.06,lon:19.94,actual:'IT10',opt:'DE10'},
+  {id:'S018',name:'Bauhaus Bratislava',lat:48.15,lon:17.11,actual:'IT10',opt:'IT10'},
+  {id:'S019',name:'Castorama Lille',lat:50.63,lon:3.06,actual:'FR10',opt:'FR10'},
+  {id:'S020',name:'Leroy Merlin Bordeaux',lat:44.84,lon:-0.58,actual:'FR10',opt:'FR10'},
+  {id:'S021',name:'Brico Depôt Porto',lat:41.15,lon:-8.61,actual:'ES10',opt:'ES10'},
+  {id:'S022',name:'Fixfast Helsinki',lat:60.17,lon:24.94,actual:'DE10',opt:'DE10'},
+  {id:'S023',name:'Mr.Bricolage Milano',lat:45.46,lon:9.19,actual:'IT10',opt:'IT10'},
+  {id:'S024',name:'Bindomix Istanbul',lat:41.01,lon:28.95,actual:'IT10',opt:'ES10'},
+];
+
+function haversine(lat1,lon1,lat2,lon2){
+  const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return Math.round(R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)));
+}
+
+function getWH(id){ return WAREHOUSES.find(w=>w.id===id); }
+
+let lgMap=null, lgLayers=[], distBarChart=null, lgMapView='actual';
+
+function initLogisticsMap(){
+  if(lgMap) return;
+  lgMap = L.map('logisticsMap',{zoomControl:true}).setView([49,10],4);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    attribution:'© OpenStreetMap © CARTO',maxZoom:18
+  }).addTo(lgMap);
+  setMapView('actual');
+  runPipelineLog();
+  initDistChart();
+  updateKPIs();
+}
+
+function clearLayers(){
+  lgLayers.forEach(l=>lgMap.removeLayer(l));
+  lgLayers=[];
+}
+
+function addLine(lat1,lon1,lat2,lon2,color,dash){
+  const l=L.polyline([[lat1,lon1],[lat2,lon2]],{color,weight:1.5,opacity:0.7,dashArray:dash||null});
+  l.addTo(lgMap); lgLayers.push(l);
+}
+
+function addMarker(lat,lon,color,radius,tooltip,small){
+  const m=L.circleMarker([lat,lon],{radius:small?5:8,fillColor:color,color:'#000',weight:1,opacity:0.9,fillOpacity:0.85})
+    .bindTooltip(tooltip,{permanent:false,direction:'top'});
+  m.addTo(lgMap); lgLayers.push(m);
+}
+
+function setMapView(view){
+  lgMapView=view;
+  ['actual','optimum','both'].forEach(v=>{
+    const b=document.getElementById('btn-'+v);
+    if(b) b.style.background = v===view ? 'rgba(255,159,46,0.15)' : 'var(--bg3)';
+    if(b) b.style.color = v===view ? 'var(--accent)' : 'var(--text2)';
+    if(b) b.style.borderColor = v===view ? 'rgba(255,159,46,0.3)' : 'var(--border)';
+  });
+  if(!lgMap) return;
+  clearLayers();
+  WAREHOUSES.forEach(w=>{
+    addMarker(w.lat,w.lon,w.color,9,`<b>${w.name}</b><br>Shipping Point`,false);
+  });
+  SHIPTO.forEach(s=>{
+    if(view==='actual'||view==='both'){
+      const wh=getWH(s.actual);
+      addLine(s.lat,s.lon,wh.lat,wh.lon,'#ff6b6b','4,4');
+      addMarker(s.lat,s.lon,'#60b8ff',5,`<b>${s.name}</b><br>Actual → ${s.actual} (${haversine(s.lat,s.lon,wh.lat,wh.lon)} km)`,true);
+    }
+    if(view==='optimum'||view==='both'){
+      const wh=getWH(s.opt);
+      addLine(s.lat,s.lon,wh.lat,wh.lon,'#4ade80',null);
+      if(view==='optimum') addMarker(s.lat,s.lon,'#4ade80',5,`<b>${s.name}</b><br>Optimum → ${s.opt} (${haversine(s.lat,s.lon,wh.lat,wh.lon)} km)`,true);
+    }
+  });
+}
+
+function updateKPIs(){
+  const actualAvg = Math.round(SHIPTO.reduce((a,s)=>{const w=getWH(s.actual);return a+haversine(s.lat,s.lon,w.lat,w.lon);},0)/SHIPTO.length);
+  const optAvg = Math.round(SHIPTO.reduce((a,s)=>{const w=getWH(s.opt);return a+haversine(s.lat,s.lon,w.lat,w.lon);},0)/SHIPTO.length);
+  const saving = Math.round((1-optAvg/actualAvg)*100);
+  document.getElementById('lg-avgdist').textContent = actualAvg.toLocaleString();
+  document.getElementById('lg-optdist').textContent = optAvg.toLocaleString();
+  document.getElementById('lg-saving').textContent = '▼ ' + saving + '% distance saving';
+}
+
+function initDistChart(){
+  const labels = SHIPTO.map(s=>s.name.length>16?s.name.slice(0,16)+'…':s.name);
+  const actualDist = SHIPTO.map(s=>{const w=getWH(s.actual);return haversine(s.lat,s.lon,w.lat,w.lon);});
+  const optDist = SHIPTO.map(s=>{const w=getWH(s.opt);return haversine(s.lat,s.lon,w.lat,w.lon);});
+  const gridColor='rgba(255,255,255,0.05)', tickColor='#6b5c47';
+  distBarChart = new Chart(document.getElementById('distanceCompareChart'),{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {label:'Actual (km)',data:actualDist,backgroundColor:'rgba(255,107,107,0.65)',borderRadius:2},
+        {label:'Optimum (km)',data:optDist,backgroundColor:'rgba(74,222,128,0.65)',borderRadius:2}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#221c14',borderColor:'rgba(255,159,46,0.2)',borderWidth:1,titleColor:'#ede8e0',bodyColor:'#9e8f7a'}
+      },
+      scales:{
+        x:{grid:{color:gridColor},ticks:{color:tickColor,font:{family:'DM Mono',size:9},maxRotation:40}},
+        y:{grid:{color:gridColor},ticks:{color:tickColor,font:{family:'DM Mono',size:10},callback:v=>v+'km'}}
+      }
+    }
+  });
+  // custom legend
+  const legendDiv = document.createElement('div');
+  legendDiv.style = 'display:flex;gap:16px;margin-top:8px;font-size:11px;color:var(--text2);font-family:var(--font-mono);';
+  legendDiv.innerHTML = '<span><span style="width:9px;height:9px;border-radius:2px;background:rgba(255,107,107,0.65);display:inline-block;margin-right:4px;"></span>Actual</span><span><span style="width:9px;height:9px;border-radius:2px;background:rgba(74,222,128,0.65);display:inline-block;margin-right:4px;"></span>Optimum</span>';
+  document.getElementById('distanceCompareChart').parentNode.parentNode.appendChild(legendDiv);
+}
+
+function runPipelineLog(){
+  const log = document.getElementById('lg-log');
+  const lines = [
+    {t:'info', m:'[INIT] Route optimizer started'},
+    {t:'data', m:'[SAP HANA] Connecting to DWDATA schema... (simulated)'},
+    {t:'success', m:'[SAP HANA] Connected. Querying ZSD_GRAVITY view...'},
+    {t:'data', m:'[QUERY] Retrieved 24 unique ship-to locations with coordinates'},
+    {t:'info', m:'[GEOCODE] Checking DistanceTable cache for existing coordinates...'},
+    {t:'data', m:'[CACHE] 18 destinations found in persistent cache — skipping API call'},
+    {t:'info', m:'[GEOCODE] Calling Google Geocoding API for 6 new destinations...'},
+    {t:'success', m:'[GEOCODE] 6/6 geocoded successfully'},
+    {t:'data', m:'[EU CHECK] S024 Istanbul: lat=41.01, lon=28.95 — OUTSIDE EU (postal code only mode)'},
+    {t:'info', m:'[API] Calling Google Distance Matrix for 24 origin-destination pairs...'},
+    {t:'data', m:'[CACHE] In-memory cache: 0 hits | DB cache: 18 hits | New calls: 6'},
+    {t:'success', m:'[API] All distances fetched. Inserting 6 new records into DWDATA.DistanceTable...'},
+    {t:'success', m:'[DB] 6 rows inserted. Commit successful.'},
+    {t:'data', m:'[ANALYSIS] Computing optimum assignment by minimum distance...'},
+    {t:'success', m:'[RESULT] Optimum avg: lower than actual. Potential saving identified.'},
+    {t:'success', m:'[DONE] ✅ Pipeline complete.'},
+  ];
+  let i = 0;
+  function addLine(){
+    if(i>=lines.length) return;
+    const now = new Date();
+    const ts = now.toTimeString().slice(0,8)+'.'+String(now.getMilliseconds()).padStart(3,'0');
+    const colorMap = {info:'#9e8f7a', data:'#60b8ff', success:'#ff9f2e', error:'#ff6b6b'};
+    const div = document.createElement('div');
+    div.style.display='flex';div.style.gap='12px';
+    div.innerHTML = `<span style="color:#6b5c47;flex-shrink:0">${ts}</span><span style="color:${colorMap[lines[i].t]}">${lines[i].m}</span>`;
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+    i++;
+    setTimeout(addLine, 300+Math.random()*400);
+  }
+  addLine();
+}
+
+document.querySelector('[onclick*="logistics"]') && document.querySelector('[onclick*="logistics"]').addEventListener('click', function(){
+  setTimeout(initLogisticsMap, 80);
+});
+
+window.addEventListener('load', initCharts);
+</script>
+</body>
+</html>
