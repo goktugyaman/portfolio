@@ -5,30 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Goktug Yaman — Data & BI Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #0f0d0a;
-    --bg2: #181410;
-    --bg3: #221c14;
-    --border: rgba(255,255,255,0.08);
-    --border2: rgba(255,255,255,0.14);
-    --text: #e8ede9;
-    --text2: #9e8f7a;
-    --text3: #6b5c47;
-    --accent: #ff9f2e;
-    --accent2: #c97520;
-    --accent-dim: rgba(255,159,46,0.12);
-    --accent-dim2: rgba(255,159,46,0.05);
-    --amber: #ffb840;
-    --amber-dim: rgba(255,184,64,0.1);
-    --blue: #60b8ff;
-    --blue-dim: rgba(96,184,255,0.1);
-    --danger: #ff6b6b;
-    --font-head: 'Syne', sans-serif;
+    --bg: #f4f6f9;
+    --bg2: #ffffff;
+    --bg3: #eaecf0;
+    --border: rgba(0,0,0,0.09);
+    --border2: rgba(0,0,0,0.18);
+    --text: #111827;
+    --text2: #374151;
+    --text3: #6b7280;
+    --accent: #2563eb;
+    --accent2: #1d4ed8;
+    --accent-dim: rgba(37,99,235,0.08);
+    --accent-dim2: rgba(37,99,235,0.04);
+    --amber: #d97706;
+    --amber-dim: rgba(217,119,6,0.1);
+    --blue: #0284c7;
+    --blue-dim: rgba(2,132,199,0.1);
+    --danger: #dc2626;
+    --green: #16a34a;
+    --font-head: 'Plus Jakarta Sans', sans-serif;
     --font-body: 'Inter', sans-serif;
     --font-mono: 'DM Mono', monospace;
   }
@@ -52,7 +55,7 @@
     height: 60px;
     position: sticky;
     top: 0;
-    background: rgba(15,13,10,0.96);
+    background: rgba(244,246,249,0.97);
     backdrop-filter: blur(8px);
     z-index: 100;
   }
@@ -72,7 +75,7 @@
     width: 8px; height: 8px;
     border-radius: 50%;
     background: var(--accent);
-    box-shadow: 0 0 10px var(--accent);
+    box-shadow: 0 0 8px rgba(37,99,235,0.4);
     flex-shrink: 0;
   }
 
@@ -96,7 +99,7 @@
     font-weight: 500;
     background: var(--accent-dim);
     color: var(--accent);
-    border: 1px solid rgba(255,159,46,0.25);
+    border: 1px solid rgba(37,99,235,0.2);
     padding: 3px 10px;
     border-radius: 20px;
     font-family: var(--font-mono);
@@ -227,7 +230,7 @@
     align-items: center;
     gap: 4px;
   }
-  .kpi-delta.up { color: #4ade80; }
+  .kpi-delta.up { color: #16a34a; }
   .kpi-delta.down { color: var(--danger); }
 
   .kpi-accent-bar {
@@ -235,7 +238,7 @@
     bottom: 0; left: 0; right: 0;
     height: 2px;
     background: var(--accent);
-    opacity: 0.35;
+    opacity: 0.4;
   }
 
   /* FILTER ROW */
@@ -340,7 +343,7 @@
   }
   .data-table tr:hover td { background: var(--bg3); color: var(--text); }
   .data-table .num { font-family: var(--font-mono); color: var(--text); }
-  .data-table .trend-up { color: #4ade80; font-family: var(--font-mono); font-size: 12px; }
+  .data-table .trend-up { color: #16a34a; font-family: var(--font-mono); font-size: 12px; }
   .data-table .trend-down { color: var(--danger); font-family: var(--font-mono); font-size: 12px; }
 
   /* BOTTOM ROW */
@@ -407,15 +410,15 @@
   .stage:last-child { border-radius: 0 10px 10px 0; border-right: 1px solid var(--border); }
 
   .stage.active {
-    background: rgba(255,159,46,0.07);
-    border-color: rgba(255,159,46,0.35);
-    border-right-color: rgba(255,159,46,0.35);
+    background: rgba(37,99,235,0.06);
+    border-color: rgba(37,99,235,0.35);
+    border-right-color: rgba(37,99,235,0.35);
     z-index: 1;
   }
   .stage.done {
-    background: rgba(255,159,46,0.03);
-    border-color: rgba(255,159,46,0.18);
-    border-right-color: rgba(255,159,46,0.18);
+    background: rgba(37,99,235,0.03);
+    border-color: rgba(37,99,235,0.15);
+    border-right-color: rgba(37,99,235,0.15);
   }
   .stage.error {
     background: rgba(255,107,107,0.06);
@@ -453,8 +456,8 @@
   }
 
   .status-idle { background: var(--bg3); color: var(--text3); }
-  .status-running { background: var(--amber-dim); color: var(--amber); animation: blink 1s infinite; }
-  .status-done { background: var(--accent-dim); color: var(--accent); }
+  .status-running { background: rgba(37,99,235,0.1); color: #2563eb; animation: blink 1s infinite; }
+  .status-done { background: rgba(22,163,74,0.1); color: #16a34a; }
   .status-error { background: rgba(255,107,107,0.1); color: var(--danger); }
 
   @keyframes blink {
@@ -496,7 +499,7 @@
 
   /* LOG */
   .log-section {
-    background: var(--bg);
+    background: var(--bg3);
     border: 1px solid var(--border);
     border-radius: 10px;
     overflow: hidden;
@@ -517,8 +520,8 @@
   .log-dot {
     width: 7px; height: 7px;
     border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 6px var(--accent);
+    background: #16a34a;
+    box-shadow: 0 0 6px rgba(22,163,74,0.5);
     display: inline-block;
     margin-right: 6px;
   }
@@ -537,7 +540,7 @@
   .log-line { display: flex; gap: 12px; }
   .log-ts { color: var(--text3); flex-shrink: 0; }
   .log-info { color: var(--text2); }
-  .log-success { color: var(--accent); }
+  .log-success { color: #16a34a; }
   .log-warning { color: var(--amber); }
   .log-error { color: var(--danger); }
   .log-data { color: var(--blue); }
@@ -556,9 +559,9 @@
 
   .btn-primary {
     background: var(--accent);
-    color: #0f0d0a;
+    color: #ffffff;
   }
-  .btn-primary:hover { background: #ffb85e; transform: translateY(-1px); }
+  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
   .btn-primary:active { transform: translateY(0); }
   .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
@@ -603,6 +606,14 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
 </style>
+<script>
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
 </head>
 <body>
 
@@ -625,17 +636,129 @@
 </div>
 
 <nav class="nav-tabs">
-  <button class="tab-btn active" onclick="switchTab('dashboard', this)">Sales Analytics Dashboard</button>
-  <button class="tab-btn" onclick="switchTab('etl', this)">ETL Pipeline Simulator</button>
+  <button class="tab-btn active" onclick="switchTab('about', this)">About Me</button>
+  <button class="tab-btn" onclick="switchTab('docs', this)">Portfolio &amp; References</button>
   <button class="tab-btn" onclick="switchTab('logistics', this)">Logistics API</button>
+  <button class="tab-btn" onclick="switchTab('dashboard', this)">Sales Dashboard</button>
   <button class="tab-btn" onclick="switchTab('stock', this)">Stock Coverage</button>
-  <button class="tab-btn" onclick="switchTab('docs', this)">Documents &amp; References</button>
+  <button class="tab-btn" onclick="switchTab('etl', this)">ETL Simulator</button>
 </nav>
 
 <main>
 
+<!-- ===== ABOUT ME TAB ===== -->
+<section id="tab-about" class="tab-panel active">
+  <div style="max-width:900px;margin:0 auto;padding:1rem 0;">
+
+    <!-- Profil kartı -->
+    <div style="display:flex;gap:2.5rem;align-items:flex-start;margin-bottom:2.5rem;flex-wrap:wrap;">
+      <div style="flex-shrink:0;">
+        <img src="https://raw.githubusercontent.com/goktugyaman/portfolio/main/photo.png"
+             alt="Goktug Yaman"
+             style="width:160px;height:160px;border-radius:50%;object-fit:cover;object-position:center top;border:3px solid var(--border2);box-shadow:0 4px 20px rgba(0,0,0,0.12);">
+      </div>
+      <div style="flex:1;min-width:220px;">
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;">Data & Business Intelligence Analyst</div>
+        <h1 style="font-family:var(--font-head);font-size:clamp(26px,4vw,42px);font-weight:800;letter-spacing:-1px;color:var(--text);margin-bottom:0.6rem;line-height:1.1;">Goktug Yaman</h1>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem;">
+          <span style="font-family:var(--font-mono);font-size:11px;background:var(--accent-dim);color:var(--accent);border:1px solid rgba(37,99,235,0.2);padding:3px 10px;border-radius:20px;">📍 Munich, Germany</span>
+          <span style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:3px 10px;border-radius:20px;">🇩🇪 Full-time work permit</span>
+          <span style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:3px 10px;border-radius:20px;">✅ Available for hire</span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <a href="https://www.linkedin.com/in/goktug-yaman/" target="_blank" style="font-family:var(--font-mono);font-size:12px;font-weight:500;padding:7px 16px;border-radius:7px;background:var(--accent);color:#fff;text-decoration:none;">LinkedIn ↗</a>
+          <a href="mailto:a.goktugyaman@gmail.com" style="font-family:var(--font-mono);font-size:12px;font-weight:500;padding:7px 16px;border-radius:7px;background:var(--bg3);color:var(--text);border:1px solid var(--border);text-decoration:none;">a.goktugyaman@gmail.com</a>
+          <a href="+4916266629 56" style="font-family:var(--font-mono);font-size:12px;font-weight:500;padding:7px 16px;border-radius:7px;background:var(--bg3);color:var(--text);border:1px solid var(--border);text-decoration:none;">+49 162 666 29 56</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem 1.8rem;margin-bottom:1.5rem;">
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.8rem;">About</div>
+      <p style="font-size:14px;color:var(--text2);line-height:1.8;font-weight:300;">
+        Data professional with experience in building and optimizing data pipelines, analytics solutions, reporting, and dashboards. Strong background with Python, SQL, Power BI, SAP BI, and ETL processes, with hands-on experience in cloud-based analytics environments. Leverage AI-assisted development environments (e.g., Cursor, Claude) to debug complex code, improve existing data workflows, and accelerate end-to-end data product delivery.
+      </p>
+    </div>
+
+    <!-- Experience -->
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem 1.8rem;margin-bottom:1.5rem;">
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1.2rem;">Work Experience</div>
+
+      <div style="margin-bottom:1.4rem;padding-bottom:1.4rem;border-bottom:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
+          <div style="font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--text);">Business Intelligence Specialist</div>
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--accent);">2023 – 2025</div>
+        </div>
+        <div style="font-size:13px;color:var(--text3);margin-bottom:8px;">Stiga S.p.a · Treviso, Italy</div>
+        <ul style="font-size:13px;color:var(--text2);line-height:1.8;padding-left:1.2rem;">
+          <li>Built scalable data models and ETL pipelines (SQL, Python) for customer-level performance reporting and scenario analysis</li>
+          <li>Developed SAP Analytics Cloud dashboards integrating Salesforce, SAP ERP, and BigQuery data sources</li>
+          <li>Established API connections for external data access and built distance optimization pipeline using Google Maps API</li>
+          <li>Developed KPIs and data models enabling management-level decision making</li>
+        </ul>
+      </div>
+
+      <div>
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
+          <div style="font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--text);">People Analytics & Compensation Specialist</div>
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--accent);">2019 – 2021</div>
+        </div>
+        <div style="font-size:13px;color:var(--text3);margin-bottom:8px;">Otokar Motor and Defense Industry · Sakarya, Turkey</div>
+        <ul style="font-size:13px;color:var(--text2);line-height:1.8;padding-left:1.2rem;">
+          <li>Delivered corporate-wide HR and financial reporting and KPI frameworks for executive decision-making</li>
+          <li>Implemented zero-based budget program leading to substantial cost savings</li>
+          <li>Performed trend, variance, and scenario analyses to support budget optimization and forecasting</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Skills + Education yan yana -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem 1.8rem;">
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;">Skills</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <span style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:3px 9px;border-radius:5px;">Python</span><span style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:3px 9px;border-radius:5px;">SQL</span><span style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:3px 9px;border-radius:5px;">SAP BW4HANA</span><span style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:3px 9px;border-radius:5px;">SAP Analytics Cloud</span><span style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:3px 9px;border-radius:5px;">Power BI</span><span style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:3px 9px;border-radius:5px;">Tableau</span><span style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:3px 9px;border-radius:5px;">BigQuery</span><span style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:3px 9px;border-radius:5px;">ETL</span><span style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:3px 9px;border-radius:5px;">API Integration</span><span style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:3px 9px;border-radius:5px;">Jira</span><span style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:3px 9px;border-radius:5px;">KPI Design</span><span style="font-family:var(--font-mono);font-size:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);padding:3px 9px;border-radius:5px;">Scenario Analysis</span>
+        </div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem 1.8rem;">
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;">Education</div>
+        <div style="margin-bottom:1rem;">
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">M.Sc. Business Administration</div>
+          <div style="font-size:12px;color:var(--text3);">University of Padova · 2021 – 2024</div>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">B.Sc. Management Engineering</div>
+          <div style="font-size:12px;color:var(--text3);">Istanbul Technical University · 2013 – 2018</div>
+        </div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-top:1rem;margin-bottom:6px;">Languages</div>
+        <div style="font-size:12px;color:var(--text2);">Turkish (Native) · English (C1) · German (B1) · Italian (B1)</div>
+      </div>
+    </div>
+
+    <!-- Referans alıntıları -->
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem 1.8rem;">
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;">What colleagues say</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div style="background:var(--bg3);border-radius:8px;padding:1rem 1.2rem;">
+          <p style="font-size:13px;color:var(--text2);line-height:1.7;font-style:italic;margin-bottom:0.6rem;">"Without a doubt, he is the greatest talent I have encountered in my professional career."</p>
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--accent);">Andrea Frassetto</div>
+          <div style="font-size:11px;color:var(--text3);">BP Improvement & BI Director · STIGA S.p.a</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:8px;padding:1rem 1.2rem;">
+          <p style="font-size:13px;color:var(--text2);line-height:1.7;font-style:italic;margin-bottom:0.6rem;">"His analytical skills, coupled with his ability to innovate and implement effective solutions, greatly enhanced our HR processes."</p>
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--accent);">Dilara Onat</div>
+          <div style="font-size:11px;color:var(--text3);">Compensation & Benefits Leader · Otokar</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
 <!-- ===== DASHBOARD TAB ===== -->
-<section id="tab-dashboard" class="tab-panel active">
+<section id="tab-dashboard" class="tab-panel">
 
   <div class="filter-row">
     <span class="filter-label">filter:</span>
@@ -831,81 +954,110 @@
 <!-- ===== LOGISTICS TAB ===== -->
 <section id="tab-logistics" class="tab-panel">
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <div style="margin-bottom:1.5rem;">
-    <h2 style="font-family:var(--font-head);font-size:22px;font-weight:700;letter-spacing:-0.3px;margin-bottom:0.4rem;">Logistics <span style="color:var(--accent)">Route Optimizer</span></h2>
-    <p style="color:var(--text2);font-size:14px;font-weight:300;max-width:700px;">
-      Simulation of a real project built at STIGA S.p.a — queries SAP HANA for ship-to locations, geocodes addresses via Google API, calculates distances to shipping points, and flags EU vs non-EU routes. The map shows actual shipping points (warehouses) vs optimum assignment based on distance minimization.
+    <h2 style="font-family:var(--font-head);font-size:22px;font-weight:700;letter-spacing:-0.3px;margin-bottom:0.4rem;color:var(--text);">Storage Location <span style="color:var(--accent)">Optimizer</span></h2>
+    <p style="color:var(--text2);font-size:14px;font-weight:300;max-width:720px;line-height:1.7;">
+      Real project built at STIGA S.p.a — for each existing storage location (plant), the model fetches driving distances to all assigned ship-to customers via Google Distance Matrix API, weights them by order volume (units shipped), and computes the <strong>weighted centroid</strong> as the optimal warehouse location. The gap between current and optimal location quantifies logistics inefficiency.
     </p>
   </div>
 
-  <div style="background:var(--bg2);border:1px solid rgba(255,159,46,0.2);border-radius:10px;padding:0.9rem 1.2rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:10px;">
-    <span style="font-size:16px;">⚠️</span>
-    <span style="font-family:var(--font-mono);font-size:11px;color:var(--amber);">SIMULATION MODE — SAP HANA credentials and Google API key replaced with mock data. Full pipeline: <span style="color:var(--text2);">Origin_Destination_List.py → geocode → Route_API.py → DistanceTable insert</span></span>
+  <div style="background:rgba(37,99,235,0.06);border:1px solid rgba(37,99,235,0.18);border-radius:10px;padding:0.9rem 1.2rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:10px;">
+    <span style="font-size:15px;flex-shrink:0;">⚠️</span>
+    <div style="font-family:var(--font-mono);font-size:11px;color:var(--blue);line-height:1.8;">
+      SIMULATION MODE — SAP HANA credentials &amp; Google API key replaced with mock data.<br>
+      <span style="color:var(--text3);">Pipeline: Origin_Destination_List.py → Google Geocoding → Route_API.py (Distance Matrix) → SAP HANA DWDATA.DistanceTable → Weighted Centroid Calculation</span>
+    </div>
   </div>
 
-  <div class="kpi-row" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));margin-bottom:1.5rem;">
+  <div class="kpi-row" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:1.5rem;">
     <div class="kpi-card">
-      <div class="kpi-label">Ship-To Locations</div>
-      <div class="kpi-value" style="font-size:22px;">24</div>
-      <div class="kpi-delta neutral">across EU</div>
+      <div class="kpi-label">Storage Locations</div>
+      <div class="kpi-value" style="font-size:22px;">4</div>
+      <div class="kpi-delta neutral" style="color:var(--text3);">EU plants</div>
       <div class="kpi-accent-bar"></div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">Shipping Points</div>
-      <div class="kpi-value" style="font-size:22px;">4</div>
-      <div class="kpi-delta neutral">warehouses</div>
+      <div class="kpi-label">Ship-To Customers</div>
+      <div class="kpi-value" style="font-size:22px;">24</div>
+      <div class="kpi-delta neutral" style="color:var(--text3);">across EU</div>
       <div class="kpi-accent-bar" style="background:var(--blue);"></div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">Avg Distance</div>
-      <div class="kpi-value" id="lg-avgdist" style="font-size:22px;">—</div>
-      <div class="kpi-delta neutral">km (actual)</div>
+      <div class="kpi-label">Weighted Avg Distance</div>
+      <div class="kpi-value" id="lg-wavgdist" style="font-size:22px;">—</div>
+      <div class="kpi-delta neutral" style="color:var(--text3);">current (volume-weighted)</div>
       <div class="kpi-accent-bar" style="background:var(--amber);"></div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">Optimum Avg</div>
-      <div class="kpi-value" id="lg-optdist" style="font-size:22px;">—</div>
-      <div class="kpi-delta up" id="lg-saving">calculating...</div>
-      <div class="kpi-accent-bar" style="background:#4ade80;"></div>
+      <div class="kpi-label">Optimal Avg Distance</div>
+      <div class="kpi-value" id="lg-woptdist" style="font-size:22px;">—</div>
+      <div class="kpi-delta up" id="lg-wsaving">calculating...</div>
+      <div class="kpi-accent-bar" style="background:var(--green);"></div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">Non-EU Routes</div>
-      <div class="kpi-value" style="font-size:22px;color:#ff6b6b;">3</div>
-      <div class="kpi-delta neutral">postal code only</div>
+      <div class="kpi-label">Max Centroid Gap</div>
+      <div class="kpi-value" id="lg-maxgap" style="font-size:22px;">—</div>
+      <div class="kpi-delta neutral" style="color:var(--text3);">km (current vs optimal)</div>
       <div class="kpi-accent-bar" style="background:var(--danger);"></div>
     </div>
   </div>
 
   <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;align-items:center;">
     <span style="font-family:var(--font-mono);font-size:10px;color:var(--text3);">view:</span>
-    <button onclick="setMapView('actual')" id="btn-actual" style="font-family:var(--font-mono);font-size:11px;padding:6px 14px;border-radius:5px;background:rgba(255,159,46,0.15);color:var(--accent);border:1px solid rgba(255,159,46,0.3);cursor:pointer;">Actual assignments</button>
-    <button onclick="setMapView('optimum')" id="btn-optimum" style="font-family:var(--font-mono);font-size:11px;padding:6px 14px;border-radius:5px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);cursor:pointer;">Optimum assignments</button>
+    <button onclick="setMapView('current')" id="btn-current" style="font-family:var(--font-mono);font-size:11px;padding:6px 14px;border-radius:5px;background:rgba(37,99,235,0.1);color:var(--accent);border:1px solid rgba(37,99,235,0.25);cursor:pointer;">Current locations</button>
+    <button onclick="setMapView('optimal')" id="btn-optimal" style="font-family:var(--font-mono);font-size:11px;padding:6px 14px;border-radius:5px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);cursor:pointer;">Optimal centroids</button>
     <button onclick="setMapView('both')" id="btn-both" style="font-family:var(--font-mono);font-size:11px;padding:6px 14px;border-radius:5px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);cursor:pointer;">Compare both</button>
-    <span style="font-family:var(--font-mono);font-size:10px;color:var(--text3);margin-left:8px;">
-      <span style="color:#ff9f2e">●</span> Warehouse &nbsp;
-      <span style="color:#60b8ff">●</span> Actual &nbsp;
-      <span style="color:#4ade80">●</span> Optimum &nbsp;
-      <span style="color:#ff6b6b">— </span>Actual route &nbsp;
-      <span style="color:#4ade80">— </span>Optimum route
+    <span style="font-family:var(--font-mono);font-size:10px;color:var(--text3);margin-left:6px;">
+      <span style="color:#2563eb">■</span> Current plant &nbsp;
+      <span style="color:#16a34a">★</span> Optimal centroid &nbsp;
+      <span style="color:#6b7280">●</span> Ship-to customer &nbsp;
+      <span style="color:#dc2626">—</span> Current route &nbsp;
+      <span style="color:#16a34a">—</span> Optimal route
     </span>
   </div>
 
-  <div id="logisticsMap" style="width:100%;height:480px;border-radius:10px;border:1px solid var(--border);overflow:hidden;margin-bottom:1.5rem;background:#1a1a2e;"></div>
+  <div id="logisticsMap" style="width:100%;height:460px;border-radius:10px;border:1px solid var(--border);overflow:hidden;margin-bottom:1.5rem;background:#e8edf2;"></div>
 
-  <div class="chart-card">
-    <div class="chart-title">Distance comparison — actual vs optimum assignment per ship-to</div>
-    <div class="chart-wrap" style="height:260px;">
-      <canvas id="distanceCompareChart" role="img" aria-label="Bar chart comparing actual vs optimum shipping distances for each ship-to location.">Actual vs optimum distance comparison.</canvas>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:1.5rem;">
+    <div class="chart-card">
+      <div class="chart-title">Volume-weighted distance — current vs optimal per plant</div>
+      <div class="chart-wrap" style="height:240px;">
+        <canvas id="distanceCompareChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Centroid gap by plant (km)</div>
+      <div class="chart-wrap" style="height:240px;">
+        <canvas id="centroidGapChart"></canvas>
+      </div>
     </div>
   </div>
 
-  <div style="margin-top:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+  <div class="chart-card" style="margin-bottom:1.5rem;">
+    <div class="chart-title">Centroid calculation detail — weighted coordinates per plant</div>
+    <div style="overflow-x:auto;">
+      <table class="data-table" style="min-width:600px;">
+        <thead>
+          <tr>
+            <th>Plant</th>
+            <th>Current location</th>
+            <th>Optimal centroid</th>
+            <th>Gap (km)</th>
+            <th>Customers</th>
+            <th>Total volume</th>
+            <th>Wtd avg dist (current)</th>
+            <th>Wtd avg dist (optimal)</th>
+          </tr>
+        </thead>
+        <tbody id="centroidTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
     <div style="background:var(--bg3);border-bottom:1px solid var(--border);padding:10px 1.2rem;font-family:var(--font-mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:8px;">
-      <span style="width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);display:inline-block;"></span>
-      pipeline simulation log
+      <span style="width:7px;height:7px;border-radius:50%;background:#16a34a;box-shadow:0 0 5px rgba(22,163,74,0.4);display:inline-block;"></span>
+      pipeline.log — storage location optimizer
     </div>
     <div id="lg-log" style="padding:1rem 1.2rem;font-family:var(--font-mono);font-size:11px;color:var(--text3);line-height:1.9;max-height:200px;overflow-y:auto;"></div>
   </div>
@@ -1019,8 +1171,8 @@
 <!-- ===== DOCUMENTS TAB ===== -->
 <section id="tab-docs" class="tab-panel">
   <div style="margin-bottom:2rem;">
-    <h2 style="font-family:var(--font-head);font-size:22px;font-weight:700;letter-spacing:-0.3px;margin-bottom:0.4rem;">Documents &amp; <span style="color:var(--accent)">References</span></h2>
-    <p style="color:var(--text2);font-size:14px;font-weight:300;">Real work samples and professional credentials. Upload all PDFs to the same folder as index.html on GitHub Pages — links work automatically.</p>
+    <h2 style="font-family:var(--font-head);font-size:22px;font-weight:700;letter-spacing:-0.3px;margin-bottom:0.4rem;">Portfolio &amp; <span style="color:var(--accent)">References</span></h2>
+    <p style="color:var(--text2);font-size:14px;font-weight:300;">Real work samples, dashboard portfolio, CV, and professional references.</p>
   </div>
 
   <div style="margin-bottom:2rem;">
@@ -1135,17 +1287,6 @@
 
     </div>
   </div>
-
-  <div style="padding-top:1.5rem;border-top:1px solid var(--border);">
-    <div style="font-family:var(--font-mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.8rem;">GitHub Pages setup — 5 steps</div>
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.2rem 1.4rem;font-family:var(--font-mono);font-size:12px;color:var(--text2);line-height:2.2;">
-      <span style="color:var(--text3)">1.</span> Create a public GitHub repo — e.g. <span style="color:var(--accent)">goktug-portfolio</span><br>
-      <span style="color:var(--text3)">2.</span> Upload all files to root: <span style="color:var(--accent)">index.html</span> + all PDFs in the same folder<br>
-      <span style="color:var(--text3)">3.</span> Rename <span style="color:var(--accent)">portfolio.html</span> → <span style="color:var(--accent)">index.html</span> before uploading<br>
-      <span style="color:var(--text3)">4.</span> Settings → Pages → Source: Deploy from branch → main → / (root)<br>
-      <span style="color:var(--text3)">5.</span> Live URL: <span style="color:var(--amber)">[github-username].github.io/goktug-portfolio</span>
-    </div>
-  </div>
 </section>
 
 </main>
@@ -1217,13 +1358,13 @@ function updateDashboard() {
     if (year === 'both') {
       const d23 = (DATA[document.getElementById('regionFilter').value] || DATA['all'])['2023'] || DATA['all']['2023'];
       trendChart.data.datasets = [
-        { label: '2024', data: d.trend, borderColor: '#ff9f2e', backgroundColor: 'rgba(255,159,46,0.07)', fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#ff9f2e', borderWidth: 2 },
+        { label: '2024', data: d.trend, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.06)', fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#2563eb', borderWidth: 2 },
         { label: '2023', data: d23.trend, borderColor: '#60b8ff', backgroundColor: 'rgba(96,184,255,0.04)', fill: false, tension: 0.4, pointRadius: 2, pointBackgroundColor: '#60b8ff', borderWidth: 1.5, borderDash: [4,3] }
       ];
       document.getElementById('trend-period').textContent = '2023 vs 2024';
     } else {
       trendChart.data.datasets = [
-        { label: year, data: d.trend, borderColor: '#ff9f2e', backgroundColor: 'rgba(255,159,46,0.07)', fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#ff9f2e', borderWidth: 2 }
+        { label: year, data: d.trend, borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.06)', fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#2563eb', borderWidth: 2 }
       ];
       document.getElementById('trend-period').textContent = 'Jan–Dec ' + year;
     }
@@ -1245,8 +1386,8 @@ function initCharts() {
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const d = getDataForFilters();
 
-  const gridColor = 'rgba(255,255,255,0.05)';
-  const tickColor = '#6b5c47';
+  const gridColor = 'rgba(0,0,0,0.07)';
+  const tickColor = '#9ca3af';
 
   trendChart = new Chart(document.getElementById('trendChart'), {
     type: 'line',
@@ -1255,18 +1396,18 @@ function initCharts() {
       datasets: [{
         label: '2024',
         data: d.trend,
-        borderColor: '#ff9f2e',
-        backgroundColor: 'rgba(255,159,46,0.07)',
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37,99,235,0.06)',
         fill: true,
         tension: 0.4,
         pointRadius: 3,
-        pointBackgroundColor: '#ff9f2e',
+        pointBackgroundColor: '#2563eb',
         borderWidth: 2
       }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#221c14', borderColor: 'rgba(255,159,46,0.2)', borderWidth: 1, titleColor: '#ede8e0', bodyColor: '#9e8f7a', callbacks: { label: ctx => ' €' + ctx.raw + 'K' } } },
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#ffffff', borderColor: 'rgba(37,99,235,0.2)', borderWidth: 1, titleColor: '#f8fafc', bodyColor: '#94a3b8', callbacks: { label: ctx => ' €' + ctx.raw + 'K' } } },
       scales: {
         x: { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'DM Mono', size: 10 } } },
         y: { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'DM Mono', size: 10 }, callback: v => '€' + v + 'K' } }
@@ -1280,8 +1421,8 @@ function initCharts() {
       labels: ['Lawn Mowers', 'Trimmers', 'Chainsaws', 'Blowers'],
       datasets: [{
         data: d.catData,
-        backgroundColor: ['#ff9f2e', '#ffd166', '#60b8ff', '#c97520'],
-        borderColor: '#181410',
+        backgroundColor: ['#2563eb', '#0284c7', '#7c3aed', '#d97706'],
+        borderColor: '#ffffff',
         borderWidth: 2,
         hoverOffset: 4
       }]
@@ -1289,7 +1430,7 @@ function initCharts() {
     options: {
       responsive: true, maintainAspectRatio: false,
       cutout: '65%',
-      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#221c14', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, titleColor: '#ede8e0', bodyColor: '#9e8f7a', callbacks: { label: ctx => ' ' + ctx.label + ': ' + ctx.raw + '%' } } }
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#ffffff', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, titleColor: '#f8fafc', bodyColor: '#94a3b8', callbacks: { label: ctx => ' ' + ctx.label + ': ' + ctx.raw + '%' } } }
     }
   });
 
@@ -1299,7 +1440,7 @@ function initCharts() {
       labels: ['DACH', 'Benelux', 'Nordic', 'Southern EU'],
       datasets: [{
         data: d.regionData,
-        backgroundColor: ['rgba(255,159,46,0.75)', 'rgba(255,159,46,0.55)', 'rgba(255,159,46,0.35)', 'rgba(255,159,46,0.2)'],
+        backgroundColor: ['rgba(37,99,235,0.75)', 'rgba(37,99,235,0.55)', 'rgba(37,99,235,0.35)', 'rgba(37,99,235,0.2)'],
         borderRadius: 4,
         borderSkipped: false
       }]
@@ -1307,10 +1448,10 @@ function initCharts() {
     options: {
       responsive: true, maintainAspectRatio: false,
       indexAxis: 'y',
-      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#221c14', borderColor: 'rgba(255,159,46,0.2)', borderWidth: 1, titleColor: '#ede8e0', bodyColor: '#9e8f7a' } },
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#ffffff', borderColor: 'rgba(37,99,235,0.2)', borderWidth: 1, titleColor: '#f8fafc', bodyColor: '#94a3b8' } },
       scales: {
         x: { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'DM Mono', size: 10 }, callback: v => v.toLocaleString() } },
-        y: { grid: { display: false }, ticks: { color: '#9e8f7a', font: { family: 'Inter', size: 12 } } }
+        y: { grid: { display: false }, ticks: { color: '#6b7280', font: { family: 'Inter', size: 12 } } }
       }
     }
   });
@@ -1486,15 +1627,15 @@ let coverageChart, matchChart2;
 function initStockCharts() {
   const data = getFilteredStock();
   const labels = data.map(d => d.sku.length > 14 ? d.sku.slice(0,14)+'…' : d.sku);
-  const gridColor = 'rgba(255,255,255,0.05)';
-  const tickColor = '#6b5c47';
+  const gridColor = 'rgba(0,0,0,0.07)';
+  const tickColor = '#9ca3af';
 
   coverageChart = new Chart(document.getElementById('coverageChart'), {
     type: 'bar',
     data: {
       labels,
       datasets: [
-        { label: 'Stock on hand', data: data.map(d => d.stockTotal), backgroundColor: 'rgba(255,159,46,0.75)', borderRadius: 3, borderSkipped: false },
+        { label: 'Stock on hand', data: data.map(d => d.stockTotal), backgroundColor: 'rgba(37,99,235,0.75)', borderRadius: 3, borderSkipped: false },
         { label: 'Demand', data: data.map(d => d.demandAdj), backgroundColor: 'rgba(96,184,255,0.5)', borderRadius: 3, borderSkipped: false }
       ]
     },
@@ -1502,7 +1643,7 @@ function initStockCharts() {
       responsive: true, maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
-        tooltip: { backgroundColor: '#221c14', borderColor: 'rgba(255,159,46,0.2)', borderWidth: 1, titleColor: '#ede8e0', bodyColor: '#9e8f7a' }
+        tooltip: { backgroundColor: '#ffffff', borderColor: 'rgba(37,99,235,0.2)', borderWidth: 1, titleColor: '#f8fafc', bodyColor: '#94a3b8' }
       },
       scales: {
         x: { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'DM Mono', size: 9 }, maxRotation: 35 } },
@@ -1533,11 +1674,11 @@ function initStockCharts() {
       responsive: true, maintainAspectRatio: false, indexAxis: 'y',
       plugins: {
         legend: { display: false },
-        tooltip: { backgroundColor: '#221c14', borderColor: 'rgba(255,159,46,0.2)', borderWidth: 1, titleColor: '#ede8e0', bodyColor: '#9e8f7a', callbacks: { label: ctx => ' Match: ' + ctx.raw + '%' } }
+        tooltip: { backgroundColor: '#ffffff', borderColor: 'rgba(37,99,235,0.2)', borderWidth: 1, titleColor: '#f8fafc', bodyColor: '#94a3b8', callbacks: { label: ctx => ' Match: ' + ctx.raw + '%' } }
       },
       scales: {
         x: { grid: { color: gridColor }, min: 0, max: 110, ticks: { color: tickColor, font: { family: 'DM Mono', size: 10 }, callback: v => v + '%' } },
-        y: { grid: { display: false }, ticks: { color: '#9e8f7a', font: { family: 'Inter', size: 11 } } }
+        y: { grid: { display: false }, ticks: { color: '#6b7280', font: { family: 'Inter', size: 11 } } }
       }
     }
   });
@@ -1610,6 +1751,294 @@ function openPDF(filename) {
 }
 
 
+// ===== STORAGE LOCATION OPTIMIZER =====
+const PLANTS = [
+  { id: 'IT10', name: 'IT10 — Castelfranco Veneto', lat: 45.67, lon: 11.92, color: '#2563eb' },
+  { id: 'DE10', name: 'DE10 — Augsburg',            lat: 48.37, lon: 10.90, color: '#7c3aed' },
+  { id: 'FR10', name: 'FR10 — Lyon',                lat: 45.74, lon:  4.84, color: '#0284c7' },
+  { id: 'ES10', name: 'ES10 — Barcelona',           lat: 41.39, lon:  2.15, color: '#d97706' },
+];
+
+// Ship-to customers: assigned plant + lat/lon + annual order volume (units)
+const CUSTOMERS = [
+  {id:'C01', name:'Bauhaus Stuttgart',        lat:48.78, lon: 9.18, plant:'DE10', vol:3200},
+  {id:'C02', name:'Hornbach München',         lat:48.14, lon:11.58, plant:'IT10', vol:2800},
+  {id:'C03', name:'OBI Hamburg',              lat:53.55, lon: 9.99, plant:'DE10', vol:4100},
+  {id:'C04', name:'Leroy Merlin Paris',       lat:48.85, lon: 2.35, plant:'IT10', vol:5200},
+  {id:'C05', name:'Castorama Lyon',           lat:45.76, lon: 4.83, plant:'FR10', vol:3800},
+  {id:'C06', name:'Bricodepot Madrid',        lat:40.42, lon:-3.70, plant:'ES10', vol:2900},
+  {id:'C07', name:'Leroy Merlin Barcelona',   lat:41.38, lon: 2.18, plant:'IT10', vol:3300},
+  {id:'C08', name:'Jumbo Amsterdam',          lat:52.37, lon: 4.90, plant:'DE10', vol:2600},
+  {id:'C09', name:'Gamma Rotterdam',          lat:51.92, lon: 4.47, plant:'IT10', vol:2100},
+  {id:'C10', name:'Brico Plan-it Brussels',   lat:50.85, lon: 4.35, plant:'FR10', vol:1900},
+  {id:'C11', name:'Praktiker Vienna',         lat:48.21, lon:16.37, plant:'IT10', vol:3500},
+  {id:'C12', name:'OBI Prague',               lat:50.08, lon:14.44, plant:'DE10', vol:2200},
+  {id:'C13', name:'Coop Bau+Hobby Zürich',    lat:47.38, lon: 8.54, plant:'IT10', vol:2700},
+  {id:'C14', name:'Brico Oslo',               lat:59.91, lon:10.75, plant:'DE10', vol:1800},
+  {id:'C15', name:'Byggmax Stockholm',        lat:59.33, lon:18.07, plant:'DE10', vol:1600},
+  {id:'C16', name:'Leroy Merlin Warsaw',      lat:52.23, lon:21.01, plant:'DE10', vol:2400},
+  {id:'C17', name:'OBI Krakow',               lat:50.06, lon:19.94, plant:'IT10', vol:1700},
+  {id:'C18', name:'Bauhaus Bratislava',       lat:48.15, lon:17.11, plant:'IT10', vol:2000},
+  {id:'C19', name:'Castorama Lille',          lat:50.63, lon: 3.06, plant:'FR10', vol:2800},
+  {id:'C20', name:'Leroy Merlin Bordeaux',    lat:44.84, lon:-0.58, plant:'FR10', vol:3100},
+  {id:'C21', name:'Brico Depôt Porto',        lat:41.15, lon:-8.61, plant:'ES10', vol:2300},
+  {id:'C22', name:'Fixfast Helsinki',         lat:60.17, lon:24.94, plant:'DE10', vol:1400},
+  {id:'C23', name:'Mr.Bricolage Milano',      lat:45.46, lon: 9.19, plant:'IT10', vol:4200},
+  {id:'C24', name:'Bindomix Istanbul',        lat:41.01, lon:28.95, plant:'IT10', vol:1500},
+];
+
+function haversine(lat1,lon1,lat2,lon2){
+  const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  return Math.round(R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)));
+}
+
+// Weighted centroid: sum(vol * coord) / sum(vol) per plant
+function computeCentroid(plantId){
+  const custs = CUSTOMERS.filter(c=>c.plant===plantId);
+  const totalVol = custs.reduce((a,c)=>a+c.vol,0);
+  const wLat = custs.reduce((a,c)=>a+c.vol*c.lat,0)/totalVol;
+  const wLon = custs.reduce((a,c)=>a+c.vol*c.lon,0)/totalVol;
+  return {lat:wLat, lon:wLon, totalVol, count:custs.length};
+}
+
+// Volume-weighted avg distance from a point to all customers of a plant
+function weightedAvgDist(plantId, fromLat, fromLon){
+  const custs = CUSTOMERS.filter(c=>c.plant===plantId);
+  const totalVol = custs.reduce((a,c)=>a+c.vol,0);
+  return Math.round(custs.reduce((a,c)=>a+c.vol*haversine(fromLat,fromLon,c.lat,c.lon),0)/totalVol);
+}
+
+// Precompute all centroids
+const CENTROIDS = {};
+PLANTS.forEach(p=>{ CENTROIDS[p.id]=computeCentroid(p.id); });
+
+let lgMap=null, lgLayers=[], distBarChart2=null, gapChart=null, lgView='current';
+
+function initLogisticsMap(){
+  if(lgMap) return;
+  lgMap = L.map('logisticsMap',{zoomControl:true}).setView([49,10],4);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+    attribution:'© OpenStreetMap © CARTO', maxZoom:18
+  }).addTo(lgMap);
+  setMapView('current');
+  initDistCharts();
+  renderCentroidTable();
+  updateKPIs();
+  runPipelineLog();
+}
+
+function clearLayers(){ lgLayers.forEach(l=>lgMap.removeLayer(l)); lgLayers=[]; }
+
+function plantColor(id){ return PLANTS.find(p=>p.id===id).color; }
+
+function addCircle(lat,lon,color,r,tip,fill){
+  const m=L.circleMarker([lat,lon],{radius:r,fillColor:color,color:'#fff',weight:1.5,opacity:1,fillOpacity:fill||0.85})
+    .bindTooltip(tip,{direction:'top'});
+  m.addTo(lgMap); lgLayers.push(m);
+}
+
+function addLine(lat1,lon1,lat2,lon2,color,dash,w){
+  const l=L.polyline([[lat1,lon1],[lat2,lon2]],{color,weight:w||1.5,opacity:0.6,dashArray:dash||null});
+  l.addTo(lgMap); lgLayers.push(l);
+}
+
+function setMapView(view){
+  lgView=view;
+  ['current','optimal','both'].forEach(v=>{
+    const b=document.getElementById('btn-'+v);
+    if(!b) return;
+    b.style.background = v===view ? 'rgba(37,99,235,0.1)' : 'var(--bg3)';
+    b.style.color = v===view ? 'var(--accent)' : 'var(--text2)';
+    b.style.borderColor = v===view ? 'rgba(37,99,235,0.25)' : 'var(--border)';
+  });
+  if(!lgMap) return;
+  clearLayers();
+
+  PLANTS.forEach(p=>{
+    const c=CENTROIDS[p.id];
+    const custs=CUSTOMERS.filter(cu=>cu.plant===p.id);
+
+    if(view==='current'||view==='both'){
+      // Draw lines from current plant to customers (thickness = volume)
+      custs.forEach(cu=>{
+        const w=Math.max(1,Math.round(cu.vol/1500));
+        addLine(p.lat,p.lon,cu.lat,cu.lon,'#dc2626','4,3',w);
+      });
+      // Current plant marker
+      addCircle(p.lat,p.lon,p.color,10,
+        `<b>${p.name}</b><br>Current location<br>Wtd avg dist: ${weightedAvgDist(p.id,p.lat,p.lon)} km`);
+    }
+
+    if(view==='optimal'||view==='both'){
+      // Draw lines from centroid to customers
+      custs.forEach(cu=>{
+        const w=Math.max(1,Math.round(cu.vol/1500));
+        addLine(c.lat,c.lon,cu.lat,cu.lon,'#16a34a',null,w);
+      });
+      // Optimal centroid — star shape via layered circles
+      addCircle(c.lat,c.lon,'#16a34a',13,
+        `<b>${p.id} Optimal Centroid</b><br>${c.lat.toFixed(2)}°N, ${c.lon.toFixed(2)}°E<br>Wtd avg dist: ${weightedAvgDist(p.id,c.lat,c.lon)} km<br>Gap from current: ${haversine(p.lat,p.lon,c.lat,c.lon)} km`,
+        0.3);
+      addCircle(c.lat,c.lon,'#16a34a',7,null,1);
+    }
+
+    // Customer dots always shown
+    custs.forEach(cu=>{
+      addCircle(cu.lat,cu.lon,'#6b7280',4,
+        `<b>${cu.name}</b><br>Plant: ${cu.plant}<br>Volume: ${cu.vol.toLocaleString()} units`,0.7);
+    });
+  });
+}
+
+function updateKPIs(){
+  const currentWtd = Math.round(PLANTS.reduce((a,p)=>{
+    const c=CENTROIDS[p.id]; return a+weightedAvgDist(p.id,p.lat,p.lon)*c.totalVol;
+  },0)/CUSTOMERS.reduce((a,c)=>a+c.vol,0));
+  const optimalWtd = Math.round(PLANTS.reduce((a,p)=>{
+    const c=CENTROIDS[p.id]; return a+weightedAvgDist(p.id,c.lat,c.lon)*c.totalVol;
+  },0)/CUSTOMERS.reduce((a,c)=>a+c.vol,0));
+  const saving=Math.round((1-optimalWtd/currentWtd)*100);
+  const maxGap=Math.max(...PLANTS.map(p=>haversine(p.lat,p.lon,CENTROIDS[p.id].lat,CENTROIDS[p.id].lon)));
+
+  document.getElementById('lg-wavgdist').textContent=currentWtd+' km';
+  document.getElementById('lg-woptdist').textContent=optimalWtd+' km';
+  document.getElementById('lg-wsaving').textContent='▼ '+saving+'% distance saving';
+  document.getElementById('lg-maxgap').textContent=maxGap+' km';
+}
+
+function initDistCharts(){
+  const labels=PLANTS.map(p=>p.id);
+  const currentD=PLANTS.map(p=>weightedAvgDist(p.id,p.lat,p.lon));
+  const optimalD=PLANTS.map(p=>{const c=CENTROIDS[p.id];return weightedAvgDist(p.id,c.lat,c.lon);});
+  const gaps=PLANTS.map(p=>haversine(p.lat,p.lon,CENTROIDS[p.id].lat,CENTROIDS[p.id].lon));
+  const grid='rgba(0,0,0,0.07)', tick='#9ca3af';
+
+  distBarChart2=new Chart(document.getElementById('distanceCompareChart'),{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'Current (km)',data:currentD,backgroundColor:'rgba(220,38,38,0.65)',borderRadius:3},
+      {label:'Optimal (km)',data:optimalD,backgroundColor:'rgba(22,163,74,0.65)',borderRadius:3}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#1e293b',titleColor:'#f8fafc',bodyColor:'#94a3b8'}},
+      scales:{
+        x:{grid:{color:grid},ticks:{color:tick,font:{family:'DM Mono',size:11}}},
+        y:{grid:{color:grid},ticks:{color:tick,font:{family:'DM Mono',size:10},callback:v=>v+' km'}}
+      }
+    }
+  });
+
+  gapChart=new Chart(document.getElementById('centroidGapChart'),{
+    type:'bar',
+    data:{labels,datasets:[{
+      label:'Gap (km)',data:gaps,
+      backgroundColor:PLANTS.map(p=>p.color+'bb'),borderRadius:3
+    }]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#1e293b',titleColor:'#f8fafc',bodyColor:'#94a3b8',
+        callbacks:{label:ctx=>' Gap: '+ctx.raw+' km'}}},
+      scales:{
+        x:{grid:{color:grid},ticks:{color:tick,font:{family:'DM Mono',size:11}}},
+        y:{grid:{color:grid},ticks:{color:tick,font:{family:'DM Mono',size:10},callback:v=>v+' km'}}
+      }
+    }
+  });
+}
+
+function renderCentroidTable(){
+  const tbody=document.getElementById('centroidTable');
+  if(!tbody) return;
+  tbody.innerHTML=PLANTS.map(p=>{
+    const c=CENTROIDS[p.id];
+    const gap=haversine(p.lat,p.lon,c.lat,c.lon);
+    const curDist=weightedAvgDist(p.id,p.lat,p.lon);
+    const optDist=weightedAvgDist(p.id,c.lat,c.lon);
+    const saving=Math.round((1-optDist/curDist)*100);
+    return `<tr>
+      <td style="font-family:var(--font-mono);font-weight:600;color:${p.color}">${p.id}</td>
+      <td style="font-size:12px;color:var(--text2)">${p.lat.toFixed(2)}°N, ${p.lon.toFixed(2)}°E</td>
+      <td style="font-size:12px;color:#16a34a">${c.lat.toFixed(2)}°N, ${c.lon.toFixed(2)}°E</td>
+      <td class="num" style="color:${gap>200?'#dc2626':gap>100?'#d97706':'#16a34a'}">${gap} km</td>
+      <td class="num">${c.count}</td>
+      <td class="num">${c.totalVol.toLocaleString()}</td>
+      <td class="num">${curDist} km</td>
+      <td class="num" style="color:#16a34a">${optDist} km <span style="font-size:10px;color:#16a34a">(▼${saving}%)</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function runPipelineLog(){
+  const log=document.getElementById('lg-log');
+  if(!log) return;
+  const lines=[
+    {t:'info', m:'[INIT] Storage Location Optimizer started'},
+    {t:'data', m:'[SAP HANA] Querying ZSD_GRAVITY view — ship-to + shipping point coordinates...'},
+    {t:'success',m:'[SAP HANA] 24 unique ship-to locations retrieved across 4 plants'},
+    {t:'info', m:'[GEOCODE] Checking DWDATA.DistanceTable for cached coordinates...'},
+    {t:'data', m:'[CACHE] 18 destinations found in DB cache — skipping API call'},
+    {t:'info', m:'[GEOCODE] Calling Google Geocoding API for 6 new addresses...'},
+    {t:'success',m:'[GEOCODE] 6/6 geocoded. EU bounding box check: C24 Istanbul → OUTSIDE EU'},
+    {t:'data', m:'[DISTANCE API] Calling Google Distance Matrix for 24 origin-destination pairs...'},
+    {t:'data', m:'[CACHE] In-memory: 0 hits | DB: 18 hits | New API calls: 6'},
+    {t:'success',m:'[DISTANCE API] All distances fetched. Inserting 6 new rows into DWDATA.DistanceTable...'},
+    {t:'success',m:'[DB] Commit successful. DistanceTable updated.'},
+    {t:'info', m:'[CENTROID] Computing weighted centroids: Σ(volume × coord) / Σ(volume) per plant...'},
+    {t:'data', m:'[CENTROID] IT10: current 45.67°N 11.92°E → optimal 46.81°N 12.44°E (gap: 148 km)'},
+    {t:'data', m:'[CENTROID] DE10: current 48.37°N 10.90°E → optimal 52.18°N 11.23°E (gap: 422 km)'},
+    {t:'data', m:'[CENTROID] FR10: current 45.74°N 4.84°E → optimal 48.12°N 3.67°E (gap: 270 km)'},
+    {t:'data', m:'[CENTROID] ES10: current 41.39°N 2.15°E → optimal 41.03°N -3.12°E (gap: 233 km)'},
+    {t:'success',m:'[RESULT] Weighted avg distance: current 892 km → optimal 634 km (▼29%)'},
+    {t:'success',m:'[DONE] ✅ Storage Location Optimizer complete.'},
+  ];
+  let i=0;
+  function addLine(){
+    if(i>=lines.length) return;
+    const now=new Date();
+    const ts=now.toTimeString().slice(0,8)+'.'+String(now.getMilliseconds()).padStart(3,'0');
+    const colors={info:'#374151',data:'#0284c7',success:'#16a34a',error:'#dc2626'};
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;gap:12px;';
+    div.innerHTML=`<span style="color:#9ca3af;flex-shrink:0">${ts}</span><span style="color:${colors[lines[i].t]}">${lines[i].m}</span>`;
+    log.appendChild(div); log.scrollTop=log.scrollHeight; i++;
+    setTimeout(addLine,250+Math.random()*350);
+  }
+  addLine();
+}
+
+document.querySelector('[onclick*="logistics"]') && document.querySelector('[onclick*="logistics"]').addEventListener('click',function(){
+  setTimeout(initLogisticsMap,80);
+});
+
+// ===== STOCK COVERAGE =====
+
+
+
+
+function matchColor(pct) {
+  if (pct >= 80) return '#4ade80';
+  if (pct >= 60) return '#ffd166';
+  return '#ff6b6b';
+}
+
+
+
+
+
+
+
+
+
+
+// Init stock charts when tab first opened
+document.querySelector('[onclick*="stock"]') && document.querySelector('[onclick*="stock"]').addEventListener('click', function() {
+  if (!coverageChart) setTimeout(initStockCharts, 50);
+});
+
+
+
+
+
 // ===== LOGISTICS MAP =====
 const WAREHOUSES = [
   { id: 'IT10', name: 'IT10 — Castelfranco Veneto', lat: 45.67, lon: 11.92, color: '#ff9f2e' },
@@ -1653,24 +2082,10 @@ function haversine(lat1,lon1,lat2,lon2){
 
 function getWH(id){ return WAREHOUSES.find(w=>w.id===id); }
 
-let lgMap=null, lgLayers=[], distBarChart=null, lgMapView='actual';
 
-function initLogisticsMap(){
-  if(lgMap) return;
-  lgMap = L.map('logisticsMap',{zoomControl:true}).setView([49,10],4);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-    attribution:'© OpenStreetMap © CARTO',maxZoom:18
-  }).addTo(lgMap);
-  setMapView('actual');
-  runPipelineLog();
-  initDistChart();
-  updateKPIs();
-}
 
-function clearLayers(){
-  lgLayers.forEach(l=>lgMap.removeLayer(l));
-  lgLayers=[];
-}
+
+
 
 function addLine(lat1,lon1,lat2,lon2,color,dash){
   const l=L.polyline([[lat1,lon1],[lat2,lon2]],{color,weight:1.5,opacity:0.7,dashArray:dash||null});
@@ -1683,47 +2098,15 @@ function addMarker(lat,lon,color,radius,tooltip,small){
   m.addTo(lgMap); lgLayers.push(m);
 }
 
-function setMapView(view){
-  lgMapView=view;
-  ['actual','optimum','both'].forEach(v=>{
-    const b=document.getElementById('btn-'+v);
-    if(b) b.style.background = v===view ? 'rgba(255,159,46,0.15)' : 'var(--bg3)';
-    if(b) b.style.color = v===view ? 'var(--accent)' : 'var(--text2)';
-    if(b) b.style.borderColor = v===view ? 'rgba(255,159,46,0.3)' : 'var(--border)';
-  });
-  if(!lgMap) return;
-  clearLayers();
-  WAREHOUSES.forEach(w=>{
-    addMarker(w.lat,w.lon,w.color,9,`<b>${w.name}</b><br>Shipping Point`,false);
-  });
-  SHIPTO.forEach(s=>{
-    if(view==='actual'||view==='both'){
-      const wh=getWH(s.actual);
-      addLine(s.lat,s.lon,wh.lat,wh.lon,'#ff6b6b','4,4');
-      addMarker(s.lat,s.lon,'#60b8ff',5,`<b>${s.name}</b><br>Actual → ${s.actual} (${haversine(s.lat,s.lon,wh.lat,wh.lon)} km)`,true);
-    }
-    if(view==='optimum'||view==='both'){
-      const wh=getWH(s.opt);
-      addLine(s.lat,s.lon,wh.lat,wh.lon,'#4ade80',null);
-      if(view==='optimum') addMarker(s.lat,s.lon,'#4ade80',5,`<b>${s.name}</b><br>Optimum → ${s.opt} (${haversine(s.lat,s.lon,wh.lat,wh.lon)} km)`,true);
-    }
-  });
-}
 
-function updateKPIs(){
-  const actualAvg = Math.round(SHIPTO.reduce((a,s)=>{const w=getWH(s.actual);return a+haversine(s.lat,s.lon,w.lat,w.lon);},0)/SHIPTO.length);
-  const optAvg = Math.round(SHIPTO.reduce((a,s)=>{const w=getWH(s.opt);return a+haversine(s.lat,s.lon,w.lat,w.lon);},0)/SHIPTO.length);
-  const saving = Math.round((1-optAvg/actualAvg)*100);
-  document.getElementById('lg-avgdist').textContent = actualAvg.toLocaleString();
-  document.getElementById('lg-optdist').textContent = optAvg.toLocaleString();
-  document.getElementById('lg-saving').textContent = '▼ ' + saving + '% distance saving';
-}
+
+
 
 function initDistChart(){
   const labels = SHIPTO.map(s=>s.name.length>16?s.name.slice(0,16)+'…':s.name);
   const actualDist = SHIPTO.map(s=>{const w=getWH(s.actual);return haversine(s.lat,s.lon,w.lat,w.lon);});
   const optDist = SHIPTO.map(s=>{const w=getWH(s.opt);return haversine(s.lat,s.lon,w.lat,w.lon);});
-  const gridColor='rgba(255,255,255,0.05)', tickColor='#6b5c47';
+  const gridColor='rgba(0,0,0,0.07)', tickColor='#6b5c47';
   distBarChart = new Chart(document.getElementById('distanceCompareChart'),{
     type:'bar',
     data:{
@@ -1737,7 +2120,7 @@ function initDistChart(){
       responsive:true,maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
-        tooltip:{backgroundColor:'#221c14',borderColor:'rgba(255,159,46,0.2)',borderWidth:1,titleColor:'#ede8e0',bodyColor:'#9e8f7a'}
+        tooltip:{backgroundColor:'#221c14',borderColor:'rgba(37,99,235,0.2)',borderWidth:1,titleColor:'#ede8e0',bodyColor:'#9e8f7a'}
       },
       scales:{
         x:{grid:{color:gridColor},ticks:{color:tickColor,font:{family:'DM Mono',size:9},maxRotation:40}},
@@ -1752,42 +2135,7 @@ function initDistChart(){
   document.getElementById('distanceCompareChart').parentNode.parentNode.appendChild(legendDiv);
 }
 
-function runPipelineLog(){
-  const log = document.getElementById('lg-log');
-  const lines = [
-    {t:'info', m:'[INIT] Route optimizer started'},
-    {t:'data', m:'[SAP HANA] Connecting to DWDATA schema... (simulated)'},
-    {t:'success', m:'[SAP HANA] Connected. Querying ZSD_GRAVITY view...'},
-    {t:'data', m:'[QUERY] Retrieved 24 unique ship-to locations with coordinates'},
-    {t:'info', m:'[GEOCODE] Checking DistanceTable cache for existing coordinates...'},
-    {t:'data', m:'[CACHE] 18 destinations found in persistent cache — skipping API call'},
-    {t:'info', m:'[GEOCODE] Calling Google Geocoding API for 6 new destinations...'},
-    {t:'success', m:'[GEOCODE] 6/6 geocoded successfully'},
-    {t:'data', m:'[EU CHECK] S024 Istanbul: lat=41.01, lon=28.95 — OUTSIDE EU (postal code only mode)'},
-    {t:'info', m:'[API] Calling Google Distance Matrix for 24 origin-destination pairs...'},
-    {t:'data', m:'[CACHE] In-memory cache: 0 hits | DB cache: 18 hits | New calls: 6'},
-    {t:'success', m:'[API] All distances fetched. Inserting 6 new records into DWDATA.DistanceTable...'},
-    {t:'success', m:'[DB] 6 rows inserted. Commit successful.'},
-    {t:'data', m:'[ANALYSIS] Computing optimum assignment by minimum distance...'},
-    {t:'success', m:'[RESULT] Optimum avg: lower than actual. Potential saving identified.'},
-    {t:'success', m:'[DONE] ✅ Pipeline complete.'},
-  ];
-  let i = 0;
-  function addLine(){
-    if(i>=lines.length) return;
-    const now = new Date();
-    const ts = now.toTimeString().slice(0,8)+'.'+String(now.getMilliseconds()).padStart(3,'0');
-    const colorMap = {info:'#9e8f7a', data:'#60b8ff', success:'#ff9f2e', error:'#ff6b6b'};
-    const div = document.createElement('div');
-    div.style.display='flex';div.style.gap='12px';
-    div.innerHTML = `<span style="color:#6b5c47;flex-shrink:0">${ts}</span><span style="color:${colorMap[lines[i].t]}">${lines[i].m}</span>`;
-    log.appendChild(div);
-    log.scrollTop = log.scrollHeight;
-    i++;
-    setTimeout(addLine, 300+Math.random()*400);
-  }
-  addLine();
-}
+
 
 document.querySelector('[onclick*="logistics"]') && document.querySelector('[onclick*="logistics"]').addEventListener('click', function(){
   setTimeout(initLogisticsMap, 80);
